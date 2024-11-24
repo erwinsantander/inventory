@@ -43,7 +43,7 @@
   }
 ?>
 <?php include_once('layouts/header.php'); ?>
-<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+<div class="row">
   
   <div class="col-md-6">
       <div class="panel panel-default">
