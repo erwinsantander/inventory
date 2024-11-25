@@ -21,7 +21,7 @@ function display_product_table_columns() {
     $conn = connect_db();
     
     // Query to get column names from the 'product' table
-    $query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'product' AND TABLE_SCHEMA = '" . DB_NAME . "'";
+    $query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'products' AND TABLE_SCHEMA = '" . DB_NAME . "'";
 
     $result = $conn->query($query);
 
