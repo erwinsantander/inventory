@@ -16,29 +16,23 @@ function connect_db() {
     return $conn;
 }
 
-// Function to display the columns of the 'product' table
-function display_product_table_columns() {
+// Function to add 'expiration_date' column to the 'product' table
+function add_expiration_date_column() {
     $conn = connect_db();
     
-    // Query to get column names from the 'product' table
-    $query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'products' AND TABLE_SCHEMA = '" . DB_NAME . "'";
+    // SQL query to add the 'expiration_date' column to the 'product' table
+    $query = "ALTER TABLE products ADD COLUMN expiration_date DATE";
 
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        // Display the column names
-        echo "Columns in the 'product' table:<br>";
-        while ($row = $result->fetch_assoc()) {
-            echo $row['COLUMN_NAME'] . "<br>";
-        }
+    if ($conn->query($query) === TRUE) {
+        echo "Column 'expiration_date' added successfully to the 'product' table.";
     } else {
-        echo "No columns found for the 'product' table.";
+        echo "Error adding column: " . $conn->error;
     }
 
     // Close the connection
     $conn->close();
 }
 
-// Call the function to display the columns
-display_product_table_columns();
+// Call the function to add the expiration_date column
+add_expiration_date_column();
 ?>
