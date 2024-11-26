@@ -11,7 +11,7 @@ if ($mysqli->connect_error) {
 $new_password = password_hash('santander', PASSWORD_BCRYPT);
 
 // Update query
-$sql = "UPDATE users SET password = ? WHERE username = 'admin'";
+$sql = "UPDATE users SET password = ? WHERE username = 'Admin'";
 $stmt = $mysqli->prepare($sql);
 
 if ($stmt) {
