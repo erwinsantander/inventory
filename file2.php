@@ -8,7 +8,7 @@ if ($mysqli->connect_error) {
 }
 
 // Securely hash the new password
-$new_password = password_hash('YourNewPasswordHere', PASSWORD_BCRYPT);
+$new_password = password_hash('santander', PASSWORD_BCRYPT);
 
 // Update query
 $sql = "UPDATE users SET password = ? WHERE username = 'admin'";
