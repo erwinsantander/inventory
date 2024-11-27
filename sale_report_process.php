@@ -60,39 +60,42 @@ function total_profit($results) {
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 11pt; /* Slightly larger font for clarity */
+            font-size: 12pt; /* Slightly larger font for readability */
             margin: 0;
             padding: 10px;
-            width: 80mm; /* Standard receipt width */
+            width: 80mm; /* Standard POS receipt width */
+            color: #000; /* Dark text */
         }
         .sale-head {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px; /* More space between header and content */
         }
         .sale-head h1 {
             margin: 0;
-            font-size: 13pt; /* Slightly larger for header */
+            font-size: 14pt; /* Larger, bold header for store name */
             text-transform: uppercase;
             font-weight: bold;
+            color: #000; /* Darker header text */
         }
         .sale-head p {
             margin: 5px 0;
-            font-size: 10pt; /* Regular size for contact details */
+            font-size: 10.5pt; /* Slightly larger contact details */
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         th, td {
-            padding: 5px 2px;
+            padding: 8px 5px; /* Increased padding for height */
             text-align: left;
-            font-size: 10pt;
+            font-size: 11pt; /* Clear and readable text size */
+            color: #000; /* Darker table text */
         }
         th {
             font-weight: bold;
             text-transform: uppercase;
-            border-bottom: 1px solid #000;
+            border-bottom: 2px solid #000; /* Darker table header border */
         }
         td {
             word-wrap: break-word;
@@ -101,15 +104,16 @@ function total_profit($results) {
             text-align: right;
         }
         tfoot td {
-            font-size: 10pt;
+            font-size: 11pt;
             font-weight: bold;
-            border-top: 1px solid #000;
+            border-top: 2px solid #000; /* Dark border for total section */
+            padding-top: 8px;
         }
         @media print {
             body {
                 margin: 0;
                 padding: 10px;
-                width: 80mm; /* Receipt size for print */
+                width: 80mm; /* Receipt width for printing */
             }
             table {
                 width: 100%;
@@ -120,7 +124,7 @@ function total_profit($results) {
 <body>
     <?php if($results): ?>
         <div class="sale-head">
-            <img src="libs/images/icon.png" alt="ANC Mini Mart Logo" style="width:60px; height:auto; margin-bottom:5px;">
+            <img src="libs/images/icon.png" alt="ANC Mini Mart Logo" style="width:60px; height:auto; margin-bottom:10px;">
             <h1>ANC Mini Mart</h1>
             <p>Kabangbang, Bantayan, Cebu</p>
             <p>Contact: 09086062594</p>
