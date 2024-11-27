@@ -93,11 +93,11 @@ function total_profit($results) {
         .text-right {
             text-align: right;
         }
-        tfoot {
-            border-top: 1px dashed #000;
-        }
-        tfoot td {
+        .totals {
             font-weight: bold;
+            border-top: 1px solid #000;
+            margin-top: 5px;
+            padding-top: 5px;
         }
         @media print {
             body {
@@ -140,17 +140,12 @@ function total_profit($results) {
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2">Total Sales</td>
-                    <td colspan="2" class="text-right">₱ <?php echo number_format(total_selling_price($results), 2); ?></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Profit</td>
-                    <td colspan="2" class="text-right">₱ <?php echo number_format(total_profit($results), 2); ?></td>
-                </tr>
-            </tfoot>
         </table>
+
+        <div class="totals">
+            <p>Total Sales: <span class="text-right">₱ <?php echo number_format(total_selling_price($results), 2); ?></span></p>
+            <p>Profit: <span class="text-right">₱ <?php echo number_format(total_profit($results), 2); ?></span></p>
+        </div>
     <?php else: ?>
         <p>No sales found for the selected period.</p>
     <?php endif; ?>
