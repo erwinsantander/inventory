@@ -95,6 +95,25 @@ function total_profit($results) {
         tfoot {
             font-weight: bold;
         }
+        @media print {
+    body {
+        margin: 0;
+        padding: 0;
+        width: 80mm; /* Standard receipt width */
+    }
+    table {
+        width: 100%; /* Adjust table width to fit the receipt */
+    }
+    th, td {
+        padding: 5px;
+        font-size: 10pt; /* Smaller font for receipt */
+    }
+    .sale-head {
+        font-size: 10pt; /* Adjust header font size */
+        margin-bottom: 10px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -154,10 +173,13 @@ function total_profit($results) {
         ?>
     <?php endif; ?>
     <script>
-        window.onload = function() {
+    window.onload = function () {
+        setTimeout(() => {
             window.print();
-        }
-    </script>
+        }, 500); // Adding a delay ensures page content is fully loaded before printing
+    };
+</script>
+
 </body>
 </html>
 <?php if(isset($db)) { $db->db_disconnect(); } ?>
