@@ -60,10 +60,10 @@ function total_profit($results) {
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 10pt;
+            font-size: 11pt; /* Slightly larger font for clarity */
             margin: 0;
             padding: 10px;
-            width: 80mm; /* Standard POS receipt width */
+            width: 80mm; /* Standard receipt width */
         }
         .sale-head {
             text-align: center;
@@ -71,38 +71,45 @@ function total_profit($results) {
         }
         .sale-head h1 {
             margin: 0;
-            font-size: 12pt;
+            font-size: 13pt; /* Slightly larger for header */
             text-transform: uppercase;
+            font-weight: bold;
         }
         .sale-head p {
             margin: 5px 0;
-            font-size: 9pt;
+            font-size: 10pt; /* Regular size for contact details */
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 10px;
         }
         th, td {
-            padding: 5px 0;
+            padding: 5px 2px;
             text-align: left;
-            font-size: 9pt;
+            font-size: 10pt;
         }
         th {
-            text-align: left;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000;
+        }
+        td {
+            word-wrap: break-word;
         }
         .text-right {
             text-align: right;
         }
-        .totals {
+        tfoot td {
+            font-size: 10pt;
             font-weight: bold;
             border-top: 1px solid #000;
-            margin-top: 5px;
-            padding-top: 5px;
         }
         @media print {
             body {
                 margin: 0;
-                width: 80mm; /* Set receipt size for print */
+                padding: 10px;
+                width: 80mm; /* Receipt size for print */
             }
             table {
                 width: 100%;
@@ -118,7 +125,7 @@ function total_profit($results) {
             <p>Kabangbang, Bantayan, Cebu</p>
             <p>Contact: 09086062594</p>
             <p>Email: ancminimartbantayan@yahoo.com</p>
-            <p><strong><?php echo isset($start_date) ? $start_date : ''; ?> to <?php echo isset($end_date) ? $end_date : ''; ?></strong></p>
+            <p><strong>Date Range: <?php echo isset($start_date) ? $start_date : ''; ?> to <?php echo isset($end_date) ? $end_date : ''; ?></strong></p>
         </div>
 
         <table>
@@ -136,16 +143,21 @@ function total_profit($results) {
                         <td><?php echo remove_junk($result['date']); ?></td>
                         <td><?php echo remove_junk(ucfirst($result['name'])); ?></td>
                         <td><?php echo (int)$result['total_sales']; ?></td>
-                        <td class="text-right"><?php echo number_format((float)$result['total_saleing_price'], 2); ?></td>
+                        <td class="text-right">₱<?php echo number_format((float)$result['total_saleing_price'], 2); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Total Sales</td>
+                    <td colspan="2" class="text-right">₱<?php echo number_format(total_selling_price($results), 2); ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Profit</td>
+                    <td colspan="2" class="text-right">₱<?php echo number_format(total_profit($results), 2); ?></td>
+                </tr>
+            </tfoot>
         </table>
-
-        <div class="totals">
-            <p>Total Sales: <span class="text-right">₱ <?php echo number_format(total_selling_price($results), 2); ?></span></p>
-            <p>Profit: <span class="text-right">₱ <?php echo number_format(total_profit($results), 2); ?></span></p>
-        </div>
     <?php else: ?>
         <p>No sales found for the selected period.</p>
     <?php endif; ?>
@@ -156,5 +168,3 @@ function total_profit($results) {
     </script>
 </body>
 </html>
-
-<?php if(isset($db)) { $db->db_disconnect(); } ?>
