@@ -1,9 +1,9 @@
 <?php
 // Database connection configuration
-$host = 'localhost';
-$dbname = 'inventory_system';
+$host = '127.0.0.1';
+$dbname = 'u510162695_ancminimart';
 $username = 'root';
-$password = '';
+$password = 'u510162695_ancminimart';
 
 try {
     // Create PDO connection
