@@ -47,7 +47,7 @@
             <div class="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden">
                 <div class="p-6">
                     <div class="text-center mb-6">
-                        <h1 id="page-title" class="text-3xl font-bold text-brand-primary mb-2">Login</h1>
+                        <h1 id="page-title" class="text-3xl font-bold text-brand-primary mb-2">Loin</h1>
                         <p class="text-gray-600">Inventory Management System</p>
                     </div>
 
@@ -96,7 +96,7 @@
 
                             <button type="submit"
                                 class="w-full bg-brand-primary text-white py-2 rounded-md hover:bg-red-700 transition duration-300">
-                                Logi
+                                Login
                             </button>
                         </form>
 
