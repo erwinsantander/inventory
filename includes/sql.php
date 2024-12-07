@@ -81,21 +81,44 @@ function tableExists($table){
  /* Login with the data provided in $_POST,
  /* coming from the login form.
 /*--------------------------------------------------------------*/
-  function authenticate($username='', $password='') {
-    global $db;
-    $username = $db->escape($username);
-    $password = $db->escape($password);
-    $sql  = sprintf("SELECT id,username,password,user_level FROM users WHERE username ='%s' LIMIT 1", $username);
-    $result = $db->query($sql);
-    if($db->num_rows($result)){
-      $user = $db->fetch_assoc($result);
-      $password_request = sha1($password);
-      if($password_request === $user['password'] ){
-        return $user['id'];
+// In includes/functions.php or includes/sql.php
+if (!function_exists('authenticate')) {
+  function authenticate($username_or_email='', $password='') {
+      global $db;
+      
+      // Escape the input to prevent SQL injection
+      $username_or_email = $db->escape($username_or_email);
+      $password = $db->escape($password);
+      
+      // Modify query to check both username and email
+      $sql = sprintf("SELECT id, username, password, user_level FROM users WHERE username='%s' OR email='%s' LIMIT 1", 
+                     $username_or_email, 
+                     $username_or_email);
+      
+      $result = $db->query($sql);
+      
+      if($db->num_rows($result)){
+          $user = $db->fetch_assoc($result);
+          
+          // Check if the password matches
+          // Support both old SHA1 and new bcrypt hashes
+          if (password_verify($password, $user['password']) || 
+              sha1($password) === $user['password']) {
+              // If old SHA1 hash is used, rehash with bcrypt
+              if (sha1($password) === $user['password']) {
+                  $new_hash = password_hash($password, PASSWORD_BCRYPT);
+                  $update_sql = sprintf("UPDATE users SET password='%s' WHERE id=%d", 
+                                        $db->escape($new_hash), 
+                                        $user['id']);
+                  $db->query($update_sql);
+              }
+              return $user['id'];
+          }
       }
-    }
-   return false;
+     
+      return false;
   }
+}
   /*--------------------------------------------------------------*/
   /* Login with the data provided in $_POST,
   /* coming from the login_v2.php form.
@@ -139,7 +162,7 @@ function tableExists($table){
   function find_all_user(){
       global $db;
       $results = array();
-      $sql = "SELECT u.id,u.name,u.username,u.user_level,u.status,u.last_login,";
+      $sql = "SELECT u.id,u.name,u.username,u.email,u.user_level,u.status,u.last_login,";
       $sql .="g.group_name ";
       $sql .="FROM users u ";
       $sql .="LEFT JOIN user_groups g ";
@@ -210,7 +233,7 @@ function tableExists($table){
    /*--------------------------------------------------------------*/
    function join_product_table(){
     global $db;
-    $sql  =" SELECT p.id,p.name,p.quantity,p.buy_price,p.sale_price,p.media_id,p.date,p.expiration_date,c.name";
+    $sql  =" SELECT p.id,p.name, p.barcode, p.quantity,p.buy_price,p.sale_price,p.media_id,p.date,p.expiration_date,c.name";
     $sql  .=" AS categorie,m.file_name AS image";
     $sql  .=" FROM products p";
     $sql  .=" LEFT JOIN categories c ON c.id = p.categorie_id";
