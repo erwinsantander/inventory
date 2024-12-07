@@ -1,0 +1,14 @@
+# HTID:23422420: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+php_value display_errors 1
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
+# Secure database files - Block direct access
+<FilesMatch "\.(db|sqlite|sqlite3|db3)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Disable directory listing for better security
+Options -Indexes
+
+# Handle PHP display errors (keeping the line from your example)
+php_value display_errors 1
