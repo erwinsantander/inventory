@@ -1,4 +1,10 @@
-
+<?php
+    ob_start();
+    require_once('includes/load.php');
+    if ($session->isUserLoggedIn()) {
+        redirect('admin.php', false);
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
