@@ -8,7 +8,7 @@
 ?>
 <?php
  if(isset($_POST['add_product'])){
-   $req_fields = array('product-title','product-categorie','product-quantity','buying-price', 'saleing-price','expiration-date' );
+   $req_fields = array('product-title','product-categorie','product-quantity','buying-price', 'saleing-price','expiration-date', 'product-barcode');
    validate_fields($req_fields);
    if(empty($errors)){
      $p_name  = remove_junk($db->escape($_POST['product-title']));
@@ -17,24 +17,37 @@
      $p_buy   = remove_junk($db->escape($_POST['buying-price']));
      $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
      $p_expiration = remove_junk($db->escape($_POST['expiration-date']));
-     if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
-       $media_id = '0';
-     } else {
-       $media_id = remove_junk($db->escape($_POST['product-photo']));
-     }
-     $date    = make_date();
-     $query  = "INSERT INTO products (";
-     $query .=" name,quantity,buy_price,sale_price,categorie_id,media_id,date,expiration_date";
-     $query .=") VALUES (";
-     $query .=" '{$p_name}', '{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}', '{$p_expiration}'";
-     $query .=")";
-     $query .=" ON DUPLICATE KEY UPDATE name='{$p_name}'";
-     if($db->query($query)){
-       $session->msg('s',"Product added ");
+     $p_barcode = remove_junk($db->escape($_POST['product-barcode']));
+     
+     // Check if a product with the same barcode already exists
+     $query = "SELECT * FROM products WHERE barcode = '{$p_barcode}' LIMIT 1";
+     $result = $db->query($query);
+     
+     if($result->num_rows > 0) {
+       // If product with the same barcode exists, show error message
+       $session->msg('d', 'Product with this barcode already exists!');
        redirect('add_product.php', false);
      } else {
-       $session->msg('d',' Sorry failed to added!');
-       redirect('product.php', false);
+       // If no product with the same barcode exists, proceed with insert
+       if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
+         $media_id = '0';
+       } else {
+         $media_id = remove_junk($db->escape($_POST['product-photo']));
+       }
+       $date    = make_date();
+       $query  = "INSERT INTO products (";
+       $query .=" name,quantity,buy_price,sale_price,categorie_id,media_id,date,expiration_date,barcode";
+       $query .=") VALUES (";
+       $query .=" '{$p_name}', '{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}', '{$p_expiration}', '{$p_barcode}'";
+       $query .=")";
+       
+       if($db->query($query)){
+         $session->msg('s',"Product added successfully.");
+         redirect('add_product.php', false);
+       } else {
+         $session->msg('d','Sorry, product could not be added!');
+         redirect('product.php', false);
+       }
      }
 
    } else{
@@ -43,11 +56,10 @@
    }
 
  }
-
 ?>
 <?php include_once('layouts/header.php'); ?>
 
-  <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -58,7 +70,7 @@
         </div>
         <div class="panel-body">
          <div class="col-md-12">
-          <form method="post" action="add_product.php" class="clearfix">
+          <form method="post" action="add_product.php" id="add-product-form" class="clearfix">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">
@@ -128,6 +140,16 @@
                   <input type="date" class="form-control" id="expiration-date" name="expiration-date" placeholder="Expiration Date">
                 </div>
               </div>
+              
+              <div class="col-md-4">
+              <span><label for="expiration-date">Barcode</label></span>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-barcode"></i>
+                  </span>
+                  <input type="text" class="form-control" name="product-barcode" id="product-barcode" placeholder="Product Barcode">
+                </div>
+              </div>
 
               </div>
               <br>
@@ -139,58 +161,71 @@
     </div>
   </div>
   <script>
-    document.getElementById('expiration-date').addEventListener('change', function() {
-    var selectedDate = new Date(this.value);
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Date',
-        text: 'Please select a future date for expiration.',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.value = '';
+    document.addEventListener('DOMContentLoaded', function() {
+      // Prevent form submission on Enter key for barcode input
+      document.getElementById('product-barcode').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault(); // Stop the default form submission
+          return false;
         }
       });
-    }
-  });
 
-     function restrictToNumbers(input) {
+      // Prevent form submission on Enter key for all inputs
+      var form = document.getElementById('add-product-form');
+      var inputs = form.querySelectorAll('input, select');
+      
+      inputs.forEach(function(input) {
+        input.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            return false;
+          }
+        });
+      });
+
+      document.getElementById('expiration-date').addEventListener('change', function() {
+        var selectedDate = new Date(this.value);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Date',
+            text: 'Please select a future date for expiration.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.value = '';
+            }
+          });
+        }
+      });
+
+      function restrictToNumbers(input) {
         input.value = input.value.replace(/[^0-9.]/g, '');
         
         // Ensure only one decimal point
         var parts = input.value.split('.');
         if (parts.length > 2) {
-            parts.pop();
-            input.value = parts.join('.');
+          parts.pop();
+          input.value = parts.join('.');
         }
-    }
+      }
 
-    document.getElementById('product-quantity').addEventListener('input', function() {
+      document.getElementById('product-quantity').addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
-    });
+      });
 
-    document.getElementById('buying-price').addEventListener('input', function() {
+      document.getElementById('buying-price').addEventListener('input', function() {
         restrictToNumbers(this);
-    });
+      });
 
-    document.getElementById('selling-price').addEventListener('input', function() {
+      document.getElementById('saleing-price').addEventListener('input', function() {
         restrictToNumbers(this);
-    });   
+      });
+
+    });
   </script>
-  <?php if ($msg): ?>
-<script>
-    Swal.fire({
-        icon: '<?php echo $msg['type']; ?>',
-        title: '<?php echo $msg['message']; ?>',
-        position: 'center',
-        showConfirmButton: true
-    });
-</script>
-<?php endif; ?>
-
 <?php include_once('layouts/footer.php'); ?>

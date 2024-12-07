@@ -85,7 +85,7 @@ include_once('layouts/header.php');
                   <td><?php echo htmlspecialchars($sale['qty']); ?></td>
                   <td><?php echo htmlspecialchars($sale['price'] * $sale['qty']); ?></td>
                   <td><?php echo htmlspecialchars($sale['date']); ?></td>
-                  <td><a href="edit_sale.php?id=<?php echo htmlspecialchars($sale['id']); ?>" class="btn btn-warning">Buy</a>
+                  <td><a href="buy_sale.php?id=<?php echo htmlspecialchars($sale['id']); ?>" class="btn btn-warning">Buy</a>
                   <!--<a href="delete_sale.php?id=<?php echo htmlspecialchars($sale['id']); ?>" class="btn btn-warning" style="background-color:grey">Delete</a></td>-->
                 </tr>
               <?php endwhile; ?>

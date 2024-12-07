@@ -21,15 +21,38 @@ if (isset($_POST['add_sale'])) {
         $date = $db->escape($_POST['date']);
         $s_date = make_date();
 
-        $sql = "INSERT INTO sales (product_id, qty, price, date) VALUES ('{$p_id}', '{$s_qty}', '{$s_total}', '{$s_date}')";
-
-        if ($db->query($sql)) {
-            update_product_qty($s_qty, $p_id);
-            $session->msg('s', "Sale added.");
+        // Check if the same product is already sold on the same date
+        $check_sale_query = "SELECT * FROM sales WHERE product_id = '{$p_id}' AND date = '{$date}' LIMIT 1";
+        $check_sale_result = $db->query($check_sale_query);
+        
+        if ($check_sale_result->num_rows > 0) {
+            // Product already sold on the same date, show an error
+            $session->msg('d', 'This product has already been sold on the selected date.');
             redirect('add_sale.php', false);
         } else {
-            $session->msg('d', 'Sorry, failed to add!');
-            redirect('add_sale.php', false);
+            // Check if there is enough stock for the product
+            $product_query = "SELECT quantity FROM products WHERE id = '{$p_id}' LIMIT 1";
+            $product_result = $db->query($product_query);
+            if ($product_result->num_rows > 0) {
+                $product = $product_result->fetch_assoc();
+                if ($s_qty > $product['quantity']) {
+                    // Insufficient stock
+                    $session->msg('d', 'Not enough stock available.');
+                    redirect('add_sale.php', false);
+                } else {
+                    // Proceed with adding the sale
+                    $sql = "INSERT INTO sales (product_id, qty, price, date) VALUES ('{$p_id}', '{$s_qty}', '{$s_total}', '{$s_date}')";
+
+                    if ($db->query($sql)) {
+                        update_product_qty($s_qty, $p_id); // Update the stock
+                        $session->msg('s', "Sale added.");
+                        redirect('add_sale.php', false);
+                    } else {
+                        $session->msg('d', 'Sorry, failed to add!');
+                        redirect('add_sale.php', false);
+                    }
+                }
+            }
         }
     } else {
         $session->msg("d", $errors);
@@ -52,7 +75,7 @@ $products_result = $db->query($products_query);
 include_once('layouts/header.php');
 ?>
 
-<div class="row">
+<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-6">
     <!-- Sale addition form -->
     <form method="post" action="add_sale.php">
@@ -87,8 +110,6 @@ include_once('layouts/header.php');
     </form>
   </div>
 </div>
-
-
 
 <?php if (isset($msg)): ?>
 <script>

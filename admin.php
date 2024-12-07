@@ -1,8 +1,14 @@
 <?php
-  $page_title = 'Admin Home Page';
-  require_once('includes/load.php');
-  // Checkin What level user has permission to view this page
-   page_require_level(1);
+$page_title = 'Admin Home Page';
+require_once('includes/load.php');
+// Checkin What level user has permission to view this page
+page_require_level(1);
+
+// Check for messages from previous redirects
+if (isset($_SESSION['message'])) {
+    $msg = json_decode($_SESSION['message'], true);
+    unset($_SESSION['message']);
+}
 ?>
 <?php
  $c_categorie     = count_by_id('categories');
@@ -19,6 +25,7 @@
    </div>
 </div>
   <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+    
     <a href="users.php" style="color:purple;">
 		<div class="col-md-3">
        <div class="panel  clearfix">
@@ -101,21 +108,21 @@
     '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr', '05' => 'May', '06' => 'Jun',
     '07' => 'Jul', '08' => 'Aug', '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'
   ];
-  
+
   $labels = [];
   $data = [];
-  
+
   foreach ($months as $num => $name) {
     $labels[] = "$name $year";
     $data[$num] = 0;
   }
-  
+
   $monthly_sales = get_monthly_sales($year);
   while ($row = $monthly_sales->fetch_assoc()) {
     $month = str_pad($row['month'], 2, '0', STR_PAD_LEFT);
     $data[$month] = floatval($row['total_sales']);
   }
-  
+
   // Flatten data for chart
   $chartData = [];
   foreach ($months as $num => $name) {
@@ -152,7 +159,18 @@
           text: 'Monthly Sales for 2024'
         }
       }
-    }
+    },
+    plugins: [{
+      id: 'customCanvasBackgroundColor',
+      beforeDraw: (chart) => {
+        const ctx = chart.canvas.getContext('2d');
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = '#f8f9fa'; // Background color (light gray)
+        ctx.fillRect(0, 0, chart.width, chart.height);
+        ctx.restore();
+      }
+    }]
   });
 </script>
 
@@ -263,16 +281,31 @@
   <div class="row">
 
   </div>
-  <?php if ($msg): ?>
+  <!-- Display SweetAlert2 message if set -->
+  <?php if (isset($msg)): ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     Swal.fire({
         icon: '<?php echo $msg['type']; ?>',
-        title: '<?php echo $msg['message']; ?>',
-        position: 'center',
-        showConfirmButton: true
+        title: '<?php echo $msg['text']; ?>',
+        position: 'top-end',
+        toast: true,
+        showConfirmButton: false,
+        timer: 3000, // Closes after 3 seconds
+        customClass: {
+            popup: 'swal2-rectangle',
+            title: 'swal2-title-normal'
+        }
     });
 </script>
+<style>
+    .swal2-rectangle {
+        border-radius: 0; /* Removes rounded corners for a rectangular shape */
+    }
+    .swal2-title-normal {
+        font-size: 14px !important; /* Adjust the font size to normal */
+    }
+</style>
 <?php endif; ?>
-
 
 <?php include_once('layouts/footer.php'); ?>
