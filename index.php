@@ -96,7 +96,7 @@
 
                             <button type="submit"
                                 class="w-full bg-brand-primary text-white py-2 rounded-md hover:bg-red-700 transition duration-300">
-                                Login
+                                Logi
                             </button>
                         </form>
 
