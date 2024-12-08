@@ -5,7 +5,7 @@ include_once('includes/load.php');
 $secret_key = '6LecM5UqAAAAAFhygg3kZDc55NREG8iGR_dktKl9';
 
 // Verify the reCAPTCHA response
-/*
+
 $recaptcha_token = $_POST['recaptcha_token'];
 $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret_key}&response={$recaptcha_token}");
 $response_keys = json_decode($response, true);
@@ -18,7 +18,7 @@ if (intval($response_keys["success"]) !== 1) {
     header('Location: index.php');
     exit();
 }
-*/
+
 // Initialize session variables for login attempts and lockout time if not set
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = 0;

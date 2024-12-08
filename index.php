@@ -238,7 +238,7 @@ if ($session->isUserLoggedIn()) {
         grecaptcha.ready(function() {
             document.getElementById('login-button').addEventListener('click', function(event) {
                 event.preventDefault();
-                grecaptcha.execute('YOUR_SITE_KEY', {action: 'login'}).then(function(token) {
+                grecaptcha.execute('6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF', {action: 'login'}).then(function(token) {
                     document.getElementById('recaptcha_token').value = token;
                     document.getElementById('login-form').submit();
                 });
