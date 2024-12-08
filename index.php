@@ -235,17 +235,28 @@ if ($session->isUserLoggedIn()) {
             }
         });
 
-        grecaptcha.ready(function() {
-            document.getElementById('login-button').addEventListener('click', function(event) {
-                event.preventDefault();
-                grecaptcha.execute('6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF', {action: 'login'}).then(function(token) {
-                    document.getElementById('recaptcha_token').value = token;
-                    document.getElementById('login-form').submit();
+         // Attach reCAPTCHA token to both forms
+    function attachRecaptchaToken(formId, action) {
+        const form = document.getElementById(formId);
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF', { action: action }).then(function(token) {
+                    const recaptchaInput = document.getElementById('recaptcha_token');
+                    recaptchaInput.value = token;
+                    form.submit();
                 });
             });
         });
-    </script>
+    }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        attachRecaptchaToken('login-form', 'login');
+        attachRecaptchaToken('signup-form', 'signup');
+    });
+    </script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF"></script>
     <?php include_once('layouts/footer.php'); ?>
 </body>
 </html>

@@ -4,13 +4,47 @@ include_once('includes/load.php');
 // Your secret key
 $secret_key = '6LecM5UqAAAAAFhygg3kZDc55NREG8iGR_dktKl9';
 
-// Verify the reCAPTCHA response
+// Function to verify reCAPTCHA v3 response
+function verify_recaptcha($token, $secret_key) {
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $secret_key,
+        'response' => $token
+    ];
 
-$recaptcha_token = $_POST['recaptcha_token'];
-$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret_key}&response={$recaptcha_token}");
-$response_keys = json_decode($response, true);
+    $options = [
+        'http' => [
+            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
 
-if (intval($response_keys["success"]) !== 1) {
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+
+    if ($response === false) {
+        return false;
+    }
+
+    $result = json_decode($response, true);
+
+    return $result;
+}
+
+// Check reCAPTCHA response
+if (!isset($_POST['recaptcha_token'])) {
+    $_SESSION['message'] = json_encode([
+        'type' => 'error',
+        'text' => 'reCAPTCHA token missing. Please try again.'
+    ]);
+    header('Location: index.php');
+    exit();
+}
+
+$recaptcha_response = verify_recaptcha($_POST['recaptcha_token'], $secret_key);
+
+if (!$recaptcha_response || !$recaptcha_response['success'] || $recaptcha_response['score'] < 0.5) {
     $_SESSION['message'] = json_encode([
         'type' => 'error',
         'text' => 'reCAPTCHA verification failed. Please try again.'
@@ -38,22 +72,24 @@ if (time() < $_SESSION['lockout_time']) {
     exit();
 }
 
-// Function to authenticate user with bcrypt and backward compatibility
+// Authentication function (unchanged, as provided in the original code)
 function authenticate($username_or_email='', $password='') {
     global $db;
-    
+
     $username_or_email = $db->escape($username_or_email);
     $password = $db->escape($password);
-    
-    $sql = sprintf("SELECT id, username, password, user_level, status FROM users WHERE (username='%s' OR email='%s') LIMIT 1", 
-                   $username_or_email, 
-                   $username_or_email);
-    
+
+    $sql = sprintf(
+        "SELECT id, username, password, user_level, status FROM users WHERE (username='%s' OR email='%s') LIMIT 1",
+        $username_or_email,
+        $username_or_email
+    );
+
     $result = $db->query($sql);
-    
-    if($db->num_rows($result)){
+
+    if ($db->num_rows($result)) {
         $user = $db->fetch_assoc($result);
-        
+
         if ($user['status'] != 1) {
             $_SESSION['message'] = json_encode([
                 'type' => 'error',
@@ -61,24 +97,22 @@ function authenticate($username_or_email='', $password='') {
             ]);
             return false;
         }
-        
-        if (password_verify($password, $user['password']) || 
-            sha1($password) === $user['password']) {
+
+        if (password_verify($password, $user['password']) || sha1($password) === $user['password']) {
             if (sha1($password) === $user['password']) {
                 $new_hash = password_hash($password, PASSWORD_BCRYPT);
-                $update_sql = sprintf("UPDATE users SET password='%s' WHERE id=%d", 
-                                      $db->escape($new_hash), 
-                                      $user['id']);
+                $update_sql = sprintf("UPDATE users SET password='%s' WHERE id=%d", $db->escape($new_hash), $user['id']);
                 $db->query($update_sql);
             }
             return ['id' => $user['id'], 'user_level' => $user['user_level']];
         }
     }
-   
+
     return false;
 }
 
-$req_fields = array('password');
+// Validate fields and process login
+$req_fields = ['password'];
 validate_fields($req_fields);
 
 $username_or_email = remove_junk($_POST['username']) ?: remove_junk($_POST['email']);
@@ -89,7 +123,7 @@ if (empty($errors)) {
 
     if ($user_data) {
         $_SESSION['login_attempts'] = 0;
-        
+
         $session->login($user_data['id']);
         updateLastLogIn($user_data['id']);
 
@@ -105,22 +139,6 @@ if (empty($errors)) {
         }
         exit();
     } else {
-        $sql = sprintf("SELECT status FROM users WHERE (username='%s' OR email='%s') LIMIT 1", 
-                       $username_or_email, 
-                       $username_or_email);
-        $result = $db->query($sql);
-        if ($db->num_rows($result)) {
-            $user = $db->fetch_assoc($result);
-            if ($user['status'] != 1) {
-                $_SESSION['message'] = json_encode([
-                    'type' => 'error',
-                    'text' => 'Your account is inactive. Please wait for admin approval.'
-                ]);
-                header('Location: index.php');
-                exit();
-            }
-        }
-
         $_SESSION['login_attempts']++;
 
         if ($_SESSION['login_attempts'] >= 3) {
@@ -143,3 +161,4 @@ if (empty($errors)) {
     $session->msg("d", $errors);
     redirect('index.php', false);
 }
+?>
