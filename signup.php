@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     image = '{$default_image}', 
                     code = '{$verification_code}', 
                     verified = {$verified}, 
-                    contact_num = '{$contact_number}', 
+                    contact_number = '{$contact_number}', 
                     created_at = NOW() 
                     WHERE email = '{$email}' AND verified = 0";
         } else {
