@@ -1,25 +1,24 @@
 <?php
-// Database connection details
 $host = '127.0.0.1';
 $dbname = 'u510162695_ancminimart';
 $username = '1Ancminimart';
 $password = 'u510162695_ancminimart';
 
 try {
-    // Create a new PDO instance
-    $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Establish a database connection
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    
+    // Set PDO to throw exceptions on error
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // SQL to add a new column 'contact_number' to the 'users' table
+    // SQL query to add the new column 'contact_number'
     $sql = "ALTER TABLE users ADD COLUMN contact_number VARCHAR(15)";
 
     // Execute the query
-    $db->exec($sql);
-    echo "Column 'contact_number' added successfully.";
+    $pdo->exec($sql);
+
+    echo "Column 'contact_number' added successfully to the 'users' table.";
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
-
-// Close the connection
-$db = null;
 ?>
