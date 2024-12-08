@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $verified = 0;
 
         if ($db->num_rows($email_check_inactive) > 0) {
-            // Update existing record
+            // Update existing recor
             $sql = "UPDATE users SET 
                     name = '{$name}', 
                     password = '{$hashed_password}', 
