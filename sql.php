@@ -4,15 +4,28 @@ $dbname = 'u510162695_ancminimart';
 $username = '1Ancminimart';
 $password = 'u510162695_ancminimart';
 
-try {
-    // Create a PDO instance to connect to the database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    
-    // Set the PDO error mode to exception
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully"; 
+// Create connection
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
-catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+
+// SQL query to access the 'users' table
+$sql = "SELECT * FROM users";
+$result = $conn->query($sql);
+
+// Check if query returned results
+if ($result->num_rows > 0) {
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"] . " - Name: " . $row["name"] . " - Email: " . $row["email"] . "<br>";
+    }
+} else {
+    echo "0 results";
 }
+
+// Close connection
+$conn->close();
 ?>
