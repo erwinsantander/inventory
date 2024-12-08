@@ -1,5 +1,13 @@
 <?php
 // signup.php
+require_once('includes/load.php');
+require_once('email_verification.php');
+
+// Redirect if already logged in
+if ($session->isUserLoggedIn()) {
+    redirect('home.php', false);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
 
