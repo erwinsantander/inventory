@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = !empty($_POST['signup_email']) ? $db->escape($_POST['signup_email']) : null;
     $password = $db->escape($_POST['signup_password']);
     $confirm_password = $db->escape($_POST['confirm_password']);
-    $contact_number = !empty($_POST['contact_number']) ? $db->escape($_POST['contact_number']) : null;
 
     // Validation
     if (empty($name))
@@ -31,8 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Password is required.";
     if ($password !== $confirm_password)
         $errors[] = "Passwords do not match.";
-    if (empty($contact_number))
-        $errors[] = "Contact number is required.";
 
     // Check if email already exists with status 1
     $email_check_active = $db->query("SELECT * FROM users WHERE email = '{$email}' AND verified = 1");
@@ -58,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     image = '{$default_image}', 
                     code = '{$verification_code}', 
                     verified = {$verified}, 
-                    contact_number = '{$contact_number}', 
                     created_at = NOW() 
                     WHERE email = '{$email}' AND verified = 0";
         } else {
@@ -71,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Insert new record
-            $sql = "INSERT INTO users (id, name, password, user_level, image, email, status, last_login, code, verified, created_at, contact_number) 
-                    VALUES ('{$random_id}', '{$name}', '{$hashed_password}', {$user_level}, '{$default_image}', '{$email}', {$status}, NULL, '{$verification_code}', {$verified}, NOW(), '{$contact_number}')";
+            $sql = "INSERT INTO users (id, name, password, user_level, image, email, status, last_login, code, verified, created_at) 
+                    VALUES ('{$random_id}', '{$name}', '{$hashed_password}', {$user_level}, '{$default_image}', '{$email}', {$status}, NULL, '{$verification_code}', {$verified}, NOW())";
         }
 
         if ($db->query($sql)) {
