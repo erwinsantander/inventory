@@ -3,6 +3,13 @@ $cartData = json_decode($_POST['cartData'], true);
 $total = $_POST['total'];
 $payment = $_POST['payment'];
 $change = $_POST['change'];
+
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

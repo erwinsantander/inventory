@@ -12,7 +12,14 @@
     $user_p = find_by_id('users',$user_id);
   endif;
 ?>
-<?php include_once('layouts/header.php'); ?>
+<?php include_once('layouts/header.php'); 
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
+?>
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
    <div class="col-md-4">
        <div class="panel profile">

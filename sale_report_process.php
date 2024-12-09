@@ -51,6 +51,13 @@ function total_buying_price($results) {
 function total_profit($results) {
     return total_selling_price($results) - total_buying_price($results);
 }
+
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 ?>
 <!doctype html>
 <html lang="en-US">
