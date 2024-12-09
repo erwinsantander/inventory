@@ -169,60 +169,72 @@ if ($session->isUserLoggedIn()) {
     </div>
     <p id="password-match" class="text-sm mt-2"></p>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('signup_password');
-        const confirmPasswordInput = document.getElementById('confirm_password');
-        const passwordStrengthBar = document.getElementById('password-strength-bar');
-        const passwordStrengthText = document.getElementById('password-strength-text');
-        const passwordMatch = document.getElementById('password-match');
-
-        passwordInput.addEventListener('input', function () {
-            const value = passwordInput.value;
-            let strength = 0;
-
-            if (value.length >= 8) strength += 1; // Minimum length
-            if (/[a-z]/.test(value)) strength += 1; // Lowercase letters
-            if (/[A-Z]/.test(value)) strength += 1; // Uppercase letters
-            if (/\d/.test(value)) strength += 1; // Numbers
-            if (/[@$!%*?&]/.test(value)) strength += 1; // Special characters
-
-            let strengthPercentage = (strength / 5) * 100;
-            let color = 'bg-red-500';
-
-            if (strengthPercentage >= 80) color = 'bg-green-500'; // Strong
-            else if (strengthPercentage >= 50) color = 'bg-yellow-500'; // Medium
-
-            passwordStrengthBar.style.width = `${strengthPercentage}%`;
-            passwordStrengthBar.className = `h-2 rounded-full ${color}`;
-            passwordStrengthText.textContent =
-                strengthPercentage >= 80
-                    ? 'Strong'
-                    : strengthPercentage >= 50
-                    ? 'Medium'
-                    : 'Weak';
-        });
-
-        confirmPasswordInput.addEventListener('input', function () {
-            if (confirmPasswordInput.value === passwordInput.value) {
-                passwordMatch.textContent = 'Passwords match';
-                passwordMatch.className = 'text-sm mt-2 text-green-500';
-            } else {
-                passwordMatch.textContent = 'Passwords do not match';
-                passwordMatch.className = 'text-sm mt-2 text-red-500';
-            }
-        });
-    });
-</script>
-
-
+<div class="flex items-center">
+        <input type="checkbox" id="terms_conditions" name="terms_conditions"
+            class="h-4 w-4 text-brand-primary focus:ring-brand-primary border-gray-300 rounded" required>
+        <label for="terms_conditions" class="ml-2 block text-sm text-gray-700">
+            I agree to the
+            <a href="#" id="terms-link" class="text-brand-primary hover:underline">Terms and Conditions</a>
+        </label>
+    </div>
+    <p id="terms-error" class="text-sm mt-2 text-red-500 hidden">You must agree to the Terms and Conditions to sign up.</p>
                             <button type="submit"
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
                                 Create Account
                             </button>
                         </form>
                     </div>
+
+                    <!-- Terms and Conditions Modal -->
+<div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg w-11/12 max-w-lg p-6">
+        <h2 class="text-xl font-bold mb-4">Terms and Conditions</h2>
+        <div class="overflow-y-auto max-h-64">
+            <p class="text-gray-600 mb-4">
+                <!-- Insert your terms and conditions content here -->
+                By signing up, you agree to comply with our terms of service. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button id="close-terms" class="px-4 py-2 bg-brand-primary text-white rounded hover:bg-red-700 transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const termsLink = document.getElementById('terms-link');
+        const termsModal = document.getElementById('terms-modal');
+        const closeTerms = document.getElementById('close-terms');
+
+        // Show the terms modal
+        termsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            termsModal.classList.remove('hidden');
+        });
+
+        // Close the terms modal
+        closeTerms.addEventListener('click', function () {
+            termsModal.classList.add('hidden');
+        });
+
+        // Prevent submission if terms checkbox is not checked
+        const signupForm = document.getElementById('signup-form');
+        const termsCheckbox = document.getElementById('terms_conditions');
+        const termsError = document.getElementById('terms-error');
+
+        signupForm.addEventListener('submit', function (event) {
+            if (!termsCheckbox.checked) {
+                event.preventDefault();
+                termsError.classList.remove('hidden');
+            } else {
+                termsError.classList.add('hidden');
+            }
+        });
+    });
+</script>
 
                     <!-- Switch between Login and Signup -->
                     <div class="text-center mt-4">
