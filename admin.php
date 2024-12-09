@@ -9,6 +9,13 @@ if (isset($_SESSION['message'])) {
     $msg = json_decode($_SESSION['message'], true);
     unset($_SESSION['message']);
 }
+
+$request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 ?>
 <?php
  $c_categorie     = count_by_id('categories');
