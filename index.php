@@ -22,8 +22,8 @@
 
         /* Header animation */
         h1 {
-            position: absolute;
-            top: 15px; /* Position the header at the top */
+            position: fixed;
+            top: 10px; /* Position the header at the top */
             font-size: 3rem;
             color: white;
             animation: moveLeft 15s linear infinite;
