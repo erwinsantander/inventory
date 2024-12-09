@@ -65,7 +65,7 @@
 </head>
 <body>
 
-    <h1>Graduate</h1>
+    <h1>Ari kaman diri katigo pagubra</h1>
 
     <div class="center-image">
         <!-- Replace 'DIRECT_IMAGE_URL' with the actual image URL -->
