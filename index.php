@@ -151,7 +151,10 @@ if ($session->isUserLoggedIn()) {
             <i class="fas fa-eye text-gray-400"></i>
         </button>
     </div>
-    <p id="password-strength" class="text-sm mt-2 text-gray-500"></p>
+    <div class="w-full bg-gray-200 rounded-full mt-2">
+        <div id="password-strength-bar" class="h-2 rounded-full"></div>
+    </div>
+    <p id="password-strength-text" class="text-sm mt-2 text-gray-500"></p>
 </div>
 
 <div>
@@ -171,26 +174,34 @@ if ($session->isUserLoggedIn()) {
     document.addEventListener('DOMContentLoaded', function () {
         const passwordInput = document.getElementById('signup_password');
         const confirmPasswordInput = document.getElementById('confirm_password');
-        const passwordStrength = document.getElementById('password-strength');
+        const passwordStrengthBar = document.getElementById('password-strength-bar');
+        const passwordStrengthText = document.getElementById('password-strength-text');
         const passwordMatch = document.getElementById('password-match');
 
         passwordInput.addEventListener('input', function () {
             const value = passwordInput.value;
-            let strength = 'Weak';
-            let color = 'text-red-500';
+            let strength = 0;
 
-            if (value.length >= 8) {
-                if (/[a-z]/.test(value) && /[A-Z]/.test(value) && /\d/.test(value) && /[@$!%*?&]/.test(value)) {
-                    strength = 'Strong';
-                    color = 'text-green-500';
-                } else if (/[a-z]/.test(value) && /\d/.test(value) || /[A-Z]/.test(value) && /\d/.test(value)) {
-                    strength = 'Medium';
-                    color = 'text-yellow-500';
-                }
-            }
+            if (value.length >= 8) strength += 1; // Minimum length
+            if (/[a-z]/.test(value)) strength += 1; // Lowercase letters
+            if (/[A-Z]/.test(value)) strength += 1; // Uppercase letters
+            if (/\d/.test(value)) strength += 1; // Numbers
+            if (/[@$!%*?&]/.test(value)) strength += 1; // Special characters
 
-            passwordStrength.textContent = `Strength: ${strength}`;
-            passwordStrength.className = `text-sm mt-2 ${color}`;
+            let strengthPercentage = (strength / 5) * 100;
+            let color = 'bg-red-500';
+
+            if (strengthPercentage >= 80) color = 'bg-green-500'; // Strong
+            else if (strengthPercentage >= 50) color = 'bg-yellow-500'; // Medium
+
+            passwordStrengthBar.style.width = `${strengthPercentage}%`;
+            passwordStrengthBar.className = `h-2 rounded-full ${color}`;
+            passwordStrengthText.textContent =
+                strengthPercentage >= 80
+                    ? 'Strong'
+                    : strengthPercentage >= 50
+                    ? 'Medium'
+                    : 'Weak';
         });
 
         confirmPasswordInput.addEventListener('input', function () {
