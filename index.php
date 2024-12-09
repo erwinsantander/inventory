@@ -76,5 +76,11 @@
         <p>Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow </p>
     </footer>
 
+    <!-- Background music -->
+    <audio autoplay loop>
+        <source src="sounds/fx.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
 </body>
 </html>
