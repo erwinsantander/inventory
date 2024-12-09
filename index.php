@@ -69,7 +69,7 @@
 
     <div class="center-image">
         <!-- Replace 'DIRECT_IMAGE_URL' with the actual image URL -->
-        <img src="" alt="Graduate Image">
+        <img src="sounds/fx.mp3" alt="Graduate Image">
     </div>
 
     <footer>
