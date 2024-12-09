@@ -69,7 +69,7 @@
 
     <div class="center-image">
         <!-- Replace 'DIRECT_IMAGE_URL' with the actual image URL -->
-        <img src="you.jpg" alt="Graduate Image">
+        <img src="users/cho.jpeg" alt="Graduate Image">
     </div>
 
     <footer>
