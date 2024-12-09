@@ -51,7 +51,7 @@
 
         .center-image img {
             max-width: 100%;
-            max-height: 80%;
+            max-height: 50%;
         }
 
         /* Footer Caption */
