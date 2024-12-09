@@ -65,7 +65,7 @@
 </head>
 <body>
 
-    <h1>Ari kaman diri katigo pagubra</h1>
+    <h1>Graduate Kana Cho!!</h1>
 
     <div class="center-image">
         <!-- Replace 'DIRECT_IMAGE_URL' with the actual image URL -->
@@ -73,7 +73,7 @@
     </div>
 
     <footer>
-        <p>Congrats!</p>
+        <p>Ari kaman diri katigo pagubra</p>
     </footer>
 
 </body>
