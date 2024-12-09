@@ -138,20 +138,73 @@ if ($session->isUserLoggedIn()) {
                             </div>
 
                             <div>
-                                <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-lock text-gray-400"></i>
-                                    </div>
-                                    <input type="password" id="signup_password" name="signup_password"
-                                        class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Create password" required>
-                                    <button type="button" id="show-signup-password"
-                                        class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                        <i class="fas fa-eye text-gray-400"></i>
-                                    </button>
-                                </div>
-                            </div>
+    <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-lock text-gray-400"></i>
+        </div>
+        <input type="password" id="signup_password" name="signup_password"
+            class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            placeholder="Create password" required minlength="8">
+        <button type="button" id="show-signup-password"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <i class="fas fa-eye text-gray-400"></i>
+        </button>
+    </div>
+    <p id="password-strength" class="text-sm mt-2 text-gray-500"></p>
+</div>
+
+<div>
+    <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-lock text-gray-400"></i>
+        </div>
+        <input type="password" id="confirm_password" name="confirm_password"
+            class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            placeholder="Confirm password" required>
+    </div>
+    <p id="password-match" class="text-sm mt-2"></p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('signup_password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const passwordStrength = document.getElementById('password-strength');
+        const passwordMatch = document.getElementById('password-match');
+
+        passwordInput.addEventListener('input', function () {
+            const value = passwordInput.value;
+            let strength = 'Weak';
+            let color = 'text-red-500';
+
+            if (value.length >= 8) {
+                if (/[a-z]/.test(value) && /[A-Z]/.test(value) && /\d/.test(value) && /[@$!%*?&]/.test(value)) {
+                    strength = 'Strong';
+                    color = 'text-green-500';
+                } else if (/[a-z]/.test(value) && /\d/.test(value) || /[A-Z]/.test(value) && /\d/.test(value)) {
+                    strength = 'Medium';
+                    color = 'text-yellow-500';
+                }
+            }
+
+            passwordStrength.textContent = `Strength: ${strength}`;
+            passwordStrength.className = `text-sm mt-2 ${color}`;
+        });
+
+        confirmPasswordInput.addEventListener('input', function () {
+            if (confirmPasswordInput.value === passwordInput.value) {
+                passwordMatch.textContent = 'Passwords match';
+                passwordMatch.className = 'text-sm mt-2 text-green-500';
+            } else {
+                passwordMatch.textContent = 'Passwords do not match';
+                passwordMatch.className = 'text-sm mt-2 text-red-500';
+            }
+        });
+    });
+</script>
+
 
                             <div>
                                 <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
