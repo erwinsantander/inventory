@@ -13,15 +13,20 @@ if ($conn->connect_error) {
 }
 
 // Handle deletion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_selected'])) {
     $tableName = $_POST['table'];
-    $id = intval($_POST['id']);
+    $ids = isset($_POST['ids']) ? $_POST['ids'] : [];
 
-    $sql = "DELETE FROM $tableName WHERE id = $id";
-    if ($conn->query($sql) === TRUE) {
-        echo "Record deleted successfully.";
+    if (!empty($ids)) {
+        $ids = implode(",", array_map('intval', $ids)); // Sanitize IDs
+        $sql = "DELETE FROM $tableName WHERE id IN ($ids)";
+        if ($conn->query($sql) === TRUE) {
+            echo "Selected records deleted successfully.";
+        } else {
+            echo "Error deleting records: " . $conn->error;
+        }
     } else {
-        echo "Error deleting record: " . $conn->error;
+        echo "No records selected for deletion.";
     }
 }
 
@@ -33,11 +38,14 @@ function displayTable($conn, $tableName) {
     if ($result->num_rows > 0) {
         echo "<div style='margin-bottom: 20px;'>";
         echo "<h2>" . strtoupper($tableName) . " TABLE</h2>";
+        echo "<form method='POST' onsubmit='return confirm(\"Are you sure you want to delete selected records?\");'>";
+        echo "<input type='hidden' name='table' value='$tableName'>";
         echo "<table border='1' cellpadding='10' cellspacing='0'>";
 
         // Get field information for headers
         $fields = $result->fetch_fields();
         echo "<tr>";
+        echo "<th style='background-color: #f2f2f2;'>Select</th>"; // Add checkbox column
         foreach ($fields as $field) {
             echo "<th style='background-color: #f2f2f2;'>" . $field->name . "</th>";
         }
@@ -47,6 +55,7 @@ function displayTable($conn, $tableName) {
         // Output data of each row
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
+            echo "<td><input type='checkbox' name='ids[]' value='" . $row['id'] . "'></td>"; // Checkbox for row selection
             foreach ($row as $key => $value) {
                 // Mask password for security
                 if (strpos(strtolower($key), 'password') !== false) {
@@ -57,7 +66,7 @@ function displayTable($conn, $tableName) {
             }
             // Add delete button
             echo "<td>";
-            echo "<form method='POST' onsubmit='return confirm(\"Are you sure you want to delete this record?\");'>";
+            echo "<form method='POST' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this record?\");'>";
             echo "<input type='hidden' name='table' value='$tableName'>";
             echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
             echo "<input type='submit' name='delete' value='Delete'>";
@@ -66,6 +75,9 @@ function displayTable($conn, $tableName) {
             echo "</tr>";
         }
         echo "</table>";
+        echo "<br>";
+        echo "<input type='submit' name='delete_selected' value='Delete Selected'>";
+        echo "</form>";
         echo "</div>";
     } else {
         echo "0 results found in $tableName table";
