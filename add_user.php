@@ -4,13 +4,6 @@
   // Checkin What level user has permission to view this page
   page_require_level(1);
   $groups = find_all('user_groups');
-
-  $request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) == '.php') {
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
 ?>
 <?php
   if(isset($_POST['add_user'])){

@@ -12,7 +12,7 @@
 <div class="row">
   
 
-<div class="row" style="margin-left: 255px; margin-top: 24px; margin-right: 10px;">
+<div class="row" style="margin-left: 255px; margin-top: 24px; margin-right: 10pzzx;">
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading clearfix">

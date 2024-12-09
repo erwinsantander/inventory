@@ -23,14 +23,7 @@ if ($_SESSION['user_level'] != 3) {
 
 ?>
 
-<?php include_once('layouts/header.php'); 
-$request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) == '.php') {
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
-?>
+<?php include_once('layouts/header.php'); ?>
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-12">
     <?php echo display_msg($msg); ?>
