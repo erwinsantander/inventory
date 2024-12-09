@@ -206,18 +206,6 @@ if ($session->isUserLoggedIn()) {
 </script>
 
 
-                            <div>
-                                <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-lock text-gray-400"></i>
-                                    </div>
-                                    <input type="password" id="confirm_password" name="confirm_password"
-                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Confirm password" required>
-                                </div>
-                            </div>
-
                             <button type="submit"
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
                                 Create Account
