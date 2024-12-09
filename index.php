@@ -15,15 +15,15 @@
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
         /* Header animation */
         h1 {
             position: absolute;
-            top: 20px;
-            left: 100%;
+            top: 20px; /* Position the header at the top */
             font-size: 3rem;
             color: white;
             animation: moveLeft 10s linear infinite;
@@ -43,16 +43,17 @@
 
         /* Centered Image */
         .center-image {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-grow: 1;
+            max-width: 100%;
+            max-height: 80%; /* Adjust to fit within the viewport */
         }
 
         .center-image img {
             max-width: 100%;
-            max-height: 50%;
-            
+            max-height: 100%;
         }
 
         /* Footer Caption */
@@ -61,6 +62,9 @@
             color: white;
             font-size: 1.5rem;
             padding: 10px;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
         }
     </style>
 </head>
@@ -74,7 +78,7 @@
     </div>
 
     <footer>
-        <p>2 DAYS LEF!!!</p>
+        <p>2 DAYS LEFT!!!</p>
     </footer>
 
 </body>
