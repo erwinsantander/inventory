@@ -88,7 +88,7 @@
     <!-- Hidden iframe for background music -->
     <iframe 
         class="background-music" 
-        src="https://www.youtube.com/embed/AtPrjYp75uA?si=yBTJJXxjX_pPtRO6&autoplay=1&loop=1&playlist=AtPrjYp75uA" 
+        src="<iframe width="560" height="315" src="https://www.youtube.com/embed/AtPrjYp75uA?si=yBTJJXxjX_pPtRO6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>" 
         title="YouTube video player" 
         frameborder="0" 
         allow="autoplay" 
