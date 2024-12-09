@@ -192,7 +192,7 @@ if ($session->isUserLoggedIn()) {
         <div class="overflow-y-auto max-h-64">
             <p class="text-gray-600 mb-4">
                 <!-- Insert your terms and conditions content here -->
-                By signing up, you agree to comply with our terms of service. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Welcome to ANC Mini Mart. These Terms and Conditions ("Terms") govern your access to and use of our services, including but not limited to our website, in-store experience, online ordering system, delivery services, and customer support channels. By accessing or using our services, you agree to be bound by these Terms. Please read them carefully.
             </p>
         </div>
         <div class="flex justify-end mt-4">
