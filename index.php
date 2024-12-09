@@ -61,6 +61,15 @@
             font-size: 1.5rem;
             padding: 10px;
         }
+
+        /* Hidden iframe for background music */
+        .background-music {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 0;
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -76,5 +85,15 @@
         <p>Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow </p>
     </footer>
 
+    <!-- Hidden iframe for background music -->
+    <iframe 
+        class="background-music" 
+        src="https://www.youtube.com/embed/AtPrjYp75uA?si=yBTJJXxjX_pPtRO6&autoplay=1&loop=1&playlist=AtPrjYp75uA" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="autoplay" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
 </body>
 </html>
