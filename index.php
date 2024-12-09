@@ -69,18 +69,12 @@
 
     <div class="center-image">
         <!-- Replace 'DIRECT_IMAGE_URL' with the actual image URL -->
-        <img src="sounds/fx.mp3" alt="Graduate Image">
+        <img src="users/wer.jpeg" alt="Graduate Image">
     </div>
 
     <footer>
-        <p>Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow </p>
+        <p>2 DAYS LEF!!!</p>
     </footer>
-
-    <!-- Background music -->
-    <audio autoplay loop>
-        <source src="sounds/fx.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
 
 </body>
 </html>
