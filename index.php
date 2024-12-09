@@ -23,10 +23,10 @@
         /* Header animation */
         h1 {
             position: absolute;
-            top: 20px; /* Position the header at the top */
+            top: 15px; /* Position the header at the top */
             font-size: 3rem;
             color: white;
-            animation: moveLeft 10s linear infinite;
+            animation: moveLeft 5s linear infinite;
         }
 
         @keyframes moveLeft {
