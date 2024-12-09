@@ -138,32 +138,84 @@ if ($session->isUserLoggedIn()) {
                             </div>
 
                             <div>
-                                <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-lock text-gray-400"></i>
-                                    </div>
-                                    <input type="password" id="signup_password" name="signup_password"
-                                        class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Create password" required>
-                                    <button type="button" id="show-signup-password"
-                                        class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                        <i class="fas fa-eye text-gray-400"></i>
-                                    </button>
-                                </div>
-                            </div>
+    <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-lock text-gray-400"></i>
+        </div>
+        <input type="password" id="signup_password" name="signup_password"
+            class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            placeholder="Create password" required minlength="8">
+        <button type="button" id="show-signup-password"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <i class="fas fa-eye text-gray-400"></i>
+        </button>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full mt-2">
+        <div id="password-strength-bar" class="h-2 rounded-full"></div>
+    </div>
+    <p id="password-strength-text" class="text-sm mt-2 text-gray-500"></p>
+</div>
 
-                            <div>
-                                <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-lock text-gray-400"></i>
-                                    </div>
-                                    <input type="password" id="confirm_password" name="confirm_password"
-                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Confirm password" required>
-                                </div>
-                            </div>
+<div>
+    <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-lock text-gray-400"></i>
+        </div>
+        <input type="password" id="confirm_password" name="confirm_password"
+            class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            placeholder="Confirm password" required>
+    </div>
+    <p id="password-match" class="text-sm mt-2"></p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('signup_password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const passwordStrengthBar = document.getElementById('password-strength-bar');
+        const passwordStrengthText = document.getElementById('password-strength-text');
+        const passwordMatch = document.getElementById('password-match');
+
+        passwordInput.addEventListener('input', function () {
+            const value = passwordInput.value;
+            let strength = 0;
+
+            if (value.length >= 8) strength += 1; // Minimum length
+            if (/[a-z]/.test(value)) strength += 1; // Lowercase letters
+            if (/[A-Z]/.test(value)) strength += 1; // Uppercase letters
+            if (/\d/.test(value)) strength += 1; // Numbers
+            if (/[@$!%*?&]/.test(value)) strength += 1; // Special characters
+
+            let strengthPercentage = (strength / 5) * 100;
+            let color = 'bg-red-500';
+
+            if (strengthPercentage >= 80) color = 'bg-green-500'; // Strong
+            else if (strengthPercentage >= 50) color = 'bg-yellow-500'; // Medium
+
+            passwordStrengthBar.style.width = `${strengthPercentage}%`;
+            passwordStrengthBar.className = `h-2 rounded-full ${color}`;
+            passwordStrengthText.textContent =
+                strengthPercentage >= 80
+                    ? 'Strong'
+                    : strengthPercentage >= 50
+                    ? 'Medium'
+                    : 'Weak';
+        });
+
+        confirmPasswordInput.addEventListener('input', function () {
+            if (confirmPasswordInput.value === passwordInput.value) {
+                passwordMatch.textContent = 'Passwords match';
+                passwordMatch.className = 'text-sm mt-2 text-green-500';
+            } else {
+                passwordMatch.textContent = 'Passwords do not match';
+                passwordMatch.className = 'text-sm mt-2 text-red-500';
+            }
+        });
+    });
+</script>
+
 
                             <button type="submit"
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
