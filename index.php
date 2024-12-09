@@ -5,16 +5,7 @@ if ($session->isUserLoggedIn()) {
     redirect('admin.php', false);
 }   
 
-// Check if the file exists with .php extension
-$page_name = basename($_SERVER['REQUEST_URI']); // Get the page name
 
-if (!file_exists($page_name . '.php')) {
-    // Handle the case if the file does not exist
-    echo "Page not found!";
-} else {
-    // Include the PHP file with the extension removed
-    include($page_name . '.php');
-}
 ?>
 
 <!DOCTYPE html>
