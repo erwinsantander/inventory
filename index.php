@@ -73,7 +73,7 @@
     </div>
 
     <footer>
-        <p>Ari kaman diri katigo pagubra</p>
+        <p>Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow </p>
     </footer>
 
 </body>
