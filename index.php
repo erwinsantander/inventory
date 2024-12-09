@@ -138,99 +138,32 @@ if ($session->isUserLoggedIn()) {
                             </div>
 
                             <div>
-        <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-lock text-gray-400"></i>
-            </div>
-            <input type="password" id="signup_password" name="signup_password"
-                class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                placeholder="Create password" required minlength="8">
-            <button type="button" id="show-signup-password"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <i class="fas fa-eye text-gray-400"></i>
-            </button>
-        </div>
-    </div>
+                                <label for="signup_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-lock text-gray-400"></i>
+                                    </div>
+                                    <input type="password" id="signup_password" name="signup_password"
+                                        class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        placeholder="Create password" required>
+                                    <button type="button" id="show-signup-password"
+                                        class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        <i class="fas fa-eye text-gray-400"></i>
+                                    </button>
+                                </div>
+                            </div>
 
-    <div>
-        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-lock text-gray-400"></i>
-            </div>
-            <input type="password" id="confirm_password" name="confirm_password"
-                class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                placeholder="Confirm password" required>
-        </div>
-    </div>
-
-    <div class="flex items-center">
-        <input type="checkbox" id="terms_conditions" name="terms_conditions"
-            class="h-4 w-4 text-brand-primary focus:ring-brand-primary border-gray-300 rounded" required>
-        <label for="terms_conditions" class="ml-2 block text-sm text-gray-700">
-            I agree to the
-            <a href="#" id="terms-link" class="text-brand-primary hover:underline">Terms and Conditions</a>
-        </label>
-    </div>
-    <p id="terms-error" class="text-sm mt-2 text-red-500 hidden">You must agree to the Terms and Conditions to sign up.</p>
-
-    <button type="submit" id="signup-button"
-        class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
-        Create Account
-    </button>
-</form>
-
-<!-- Terms and Conditions Modal -->
-<div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg w-11/12 max-w-lg p-6">
-        <h2 class="text-xl font-bold mb-4">Terms and Conditions</h2>
-        <div class="overflow-y-auto max-h-64">
-            <p class="text-gray-600 mb-4">
-                <!-- Insert your terms and conditions content here -->
-                By signing up, you agree to comply with our terms of service. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
-        </div>
-        <div class="flex justify-end mt-4">
-            <button id="close-terms" class="px-4 py-2 bg-brand-primary text-white rounded hover:bg-red-700 transition duration-300">
-                Close
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const termsLink = document.getElementById('terms-link');
-        const termsModal = document.getElementById('terms-modal');
-        const closeTerms = document.getElementById('close-terms');
-
-        // Show the terms modal
-        termsLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.classList.remove('hidden');
-        });
-
-        // Close the terms modal
-        closeTerms.addEventListener('click', function () {
-            termsModal.classList.add('hidden');
-        });
-
-        // Prevent submission if terms checkbox is not checked
-        const signupForm = document.getElementById('signup-form');
-        const termsCheckbox = document.getElementById('terms_conditions');
-        const termsError = document.getElementById('terms-error');
-
-        signupForm.addEventListener('submit', function (event) {
-            if (!termsCheckbox.checked) {
-                event.preventDefault();
-                termsError.classList.remove('hidden');
-            } else {
-                termsError.classList.add('hidden');
-            }
-        });
-    });
-</script>
+                            <div>
+                                <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-lock text-gray-400"></i>
+                                    </div>
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        placeholder="Confirm password" required>
+                                </div>
+                            </div>
 
                             <button type="submit"
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
