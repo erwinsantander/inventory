@@ -44,7 +44,7 @@ $sales_query = "
 ";
 $sales_result = $db->query($sales_query);
 
-include_once('layouts/header.php');z
+include_once('layouts/header.php');
 ?>
 
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
