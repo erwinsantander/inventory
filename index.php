@@ -234,7 +234,7 @@ if (isset($_SESSION['message'])) {
                         // Show SweetAlert if there's a message
                         <?php if ($message): ?>
                         Swal.fire({
-                            title: '<?php echo $message['type'] === 'success' ? 'Success!' : 'Error!'; ?>',
+                            title: '<?php echo $message['type'] === 'success' ? '' : ''; ?>',
                             text: '<?php echo $message['text']; ?>',
                             icon: '<?php echo $message['type']; ?>',
                             position: 'top-end',
