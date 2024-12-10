@@ -78,18 +78,6 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 </div>
                             </div>
 
-                            <div id="email-field" class="hidden">
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-envelope text-gray-400"></i>
-                                    </div>
-                                    <input type="email" name="email"
-                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Enter email">
-                                </div>
-                            </div>
-
                             <div>
                                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                                 <div class="relative">
@@ -110,10 +98,25 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 class="w-full bg-brand-primary text-white py-2 rounded-md hover:bg-red-700 transition duration-300">
                                 Login
                             </button>
+                        </form>
 
-                            <p class="text-sm text-gray-600 mt-4">
-                                <a href="#" id="forgot-password-link" class="text-brand-primary hover:underline">Forgot Password?</a>
-                            </p>
+                        <!-- Forgot Password Form (Hidden by Default) -->
+                        <form method="post" action="forgot_password.php" id="forgot-password-form" class="space-y-4 hidden">
+                            <div>
+                                <label for="forgot_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-envelope text-gray-400"></i>
+                                    </div>
+                                    <input type="email" name="forgot_email"
+                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        placeholder="Enter your email" required>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
+                                Reset Password
+                            </button>
                         </form>
 
                         <!-- Signup Form (Hidden by Default) -->
@@ -200,28 +203,6 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 Create Account
                             </button>
                         </form>
-
-                        <!-- Forgot Password Form (Hidden by Default) -->
-                        <form method="post" action="forgot_password.php" id="forgot-password-form" class="space-y-4 hidden">
-                            <div>
-                                <label for="forgot_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-envelope text-gray-400"></i>
-                                    </div>
-                                    <input type="email" name="forgot_email"
-                                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                        placeholder="Enter your email" required>
-                                </div>
-                            </div>
-                            <button type="submit"
-                                class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
-                                Reset Password
-                            </button>
-                            <p class="text-sm text-gray-600 mt-4">
-                                <a href="#" id="back-to-login" class="text-brand-primary hover:underline">Back to Login</a>
-                            </p>
-                        </form>
                     </div>
 
                     <!-- Terms and Conditions Modal -->
@@ -272,71 +253,12 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                     termsError.classList.add('hidden');
                                 }
                             });
-
-                            const forgotPasswordLink = document.getElementById('forgot-password-link');
-                            const loginForm = document.getElementById('login-form');
-                            const forgotPasswordForm = document.getElementById('forgot-password-form');
-                            const pageTitle = document.getElementById('page-title');
-                            const switchFormText = document.getElementById('switch-form-text');
-
-                            forgotPasswordLink.addEventListener('click', function (e) {
-                                e.preventDefault();
-                                loginForm.classList.add('hidden');
-                                forgotPasswordForm.classList.remove('hidden');
-                                pageTitle.textContent = 'Forgot Password';
-                                switchFormText.classList.add('hidden');
-                            });
-
-                            const backToLoginLink = document.getElementById('back-to-login');
-                            backToLoginLink.addEventListener('click', function (e) {
-                                e.preventDefault();
-                                forgotPasswordForm.classList.add('hidden');
-                                loginForm.classList.remove('hidden');
-                                pageTitle.textContent = 'Login';
-                                switchFormText.classList.remove('hidden');
-                            });
                         });
 
-                        <?php if (isset($message)): ?>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                Swal.fire({
-                                    title: '<?php echo $message['type'] === 'success' ? '' : ''; ?>',
-                                    text: '<?php echo $message['text']; ?>',
-                                    icon: '<?php echo $message['type']; ?>',
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    toast: true,
-                                    background: '<?php echo $message['type'] === 'success' ? '#d1f2eb' : '#f2d7d5'; ?>',
-                                    customClass: {
-                                        popup: 'swal2-toast-custom-class'
-                                    }
-                                }).then(() => {
-                                    <?php if ($message['type'] === 'success'): ?>
-                                        window.location.href = '<?php echo $_SESSION['redirect_url'] ?? 'home.php'; ?>';
-                                    <?php endif; ?>
-                                });
-                            });
-                        <?php endif; ?>
-
-                        function setupPasswordToggle(passwordId, toggleButtonId) {
-                            const passwordField = document.getElementById(passwordId);
-                            const toggleButton = document.getElementById(toggleButtonId);
-                            const icon = toggleButton.querySelector('i');
-                            toggleButton.addEventListener('click', function () {
-                                const type = passwordField.type === 'password' ? 'text' : 'password';
-                                passwordField.type = type;
-                                icon.classList.toggle('fa-eye');
-                                icon.classList.toggle('fa-eye-slash');
-                            });
-                        }
-
-                        setupPasswordToggle('password', 'show-password');
-                        setupPasswordToggle('signup_password', 'show-signup-password');
-
-                        // Form switching logic using event delegation
+                        // Switch between Login, Signup, and Forgot Password
                         document.addEventListener('click', function (e) {
                             const switchFormLink = e.target.closest('#switch-form');
+                            const forgotPasswordLink = e.target.closest('#forgot-password-link');
 
                             if (switchFormLink) {
                                 e.preventDefault();
@@ -356,6 +278,17 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                     pageTitle.textContent = 'Sign Up';
                                     switchFormText.innerHTML = 'Already have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Login</a>';
                                 }
+                            }
+
+                            if (forgotPasswordLink) {
+                                e.preventDefault();
+                                const loginForm = document.getElementById('login-form');
+                                const forgotPasswordForm = document.getElementById('forgot-password-form');
+                                const pageTitle = document.getElementById('page-title');
+
+                                loginForm.classList.add('hidden');
+                                forgotPasswordForm.classList.remove('hidden');
+                                pageTitle.textContent = 'Forgot Password';
                             }
                         });
 
@@ -379,12 +312,38 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             attachRecaptchaToken('login-form', 'login');
                             attachRecaptchaToken('signup-form', 'signup');
                         });
+
+                        function setupPasswordToggle(passwordId, toggleButtonId) {
+                            const passwordField = document.getElementById(passwordId);
+                            const toggleButton = document.getElementById(toggleButtonId);
+                            const icon = toggleButton.querySelector('i');
+                            toggleButton.addEventListener('click', function () {
+                                const type = passwordField.type === 'password' ? 'text' : 'password';
+                                passwordField.type = type;
+                                icon.classList.toggle('fa-eye');
+                                icon.classList.toggle('fa-eye-slash');
+                            });
+                        }
+
+                        setupPasswordToggle('password', 'show-password');
+                        setupPasswordToggle('signup_password', 'show-signup-password');
                     </script>
-                    <script src="https://www.google.com/recaptcha/api.js?render=6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF"></script>
-                    <?php include_once('layouts/footer.php'); ?>
+
+                    <div class="text-center mt-4">
+                        <p id="switch-form-text" class="text-sm text-gray-600">
+                            Don't have an account?
+                            <a href="#" id="switch-form" class="text-brand-primary hover:underline">Sign Up</a>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            <a href="#" id="forgot-password-link" class="text-brand-primary hover:underline">Forgot Password?</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF"></script>
+    <?php include_once('layouts/footer.php'); ?>
 </body>
 </html>
