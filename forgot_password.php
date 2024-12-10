@@ -1,10 +1,11 @@
 <?php
-// Database configuration
-define( 'DB_HOST', '127.0.0.1' );          // Set database host
-define( 'DB_USER', 'u510162695_ancminimart' );             // Set database user
-define( 'DB_PASS', '1Ancminimart' );             // Set database password
-define( 'DB_NAME', 'u510162695_ancminimart' );        // Set database name
+session_start(); // Start the session to use session variables
 
+// Database configuration
+define('DB_HOST', '127.0.0.1'); // Set database host
+define('DB_USER', 'u510162695_ancminimart'); // Set database user
+define('DB_PASS', '1Ancminimart'); // Set database password
+define('DB_NAME', 'u510162695_ancminimart'); // Set database name
 
 try {
     // Create a new PDO instance
@@ -15,6 +16,7 @@ try {
     // Handle connection error
     die("Connection failed: " . $e->getMessage());
 }
+
 require 'vendor/autoload.php'; // Include Composer's autoloader
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -42,12 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Server settings
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';  // SMTP server
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'montgomeryaurelia06@gmail.com';  
-            $mail->Password   = 'oylq mpnj adlw iuod';    
+            $mail->Host = 'smtp.gmail.com'; // SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'montgomeryaurelia06@gmail.com';
+            $mail->Password = 'oylq mpnj adlw iuod';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
+            $mail->Port = 587;
 
             // Recipients
             $mail->setFrom('montgomeryaurelia06@gmail.com', 'Inventory Management System');
@@ -60,12 +62,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Body = "Click the following link to reset your password: <a href='$resetLink'>$resetLink</a>";
 
             $mail->send();
-            echo 'An email has been sent to your email address with instructions to reset your password.';
+            $_SESSION['message'] = json_encode([
+                'type' => 'success',
+                'text' => 'An email has been sent to your email address with instructions to reset your password.'
+            ]);
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $_SESSION['message'] = json_encode([
+                'type' => 'error',
+                'text' => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"
+            ]);
         }
     } else {
-        echo "No account found with that email address.";
+        $_SESSION['message'] = json_encode([
+            'type' => 'error',
+            'text' => 'No account found with that email address.'
+        ]);
     }
+
+    // Redirect back to the main page
+    header('Location: index.php'); // Change 'index.php' to your main page
+    exit();
 }
 ?>
