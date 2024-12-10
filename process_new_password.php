@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'type' => 'success',
             'text' => 'Password has been reset successfully.'
         ]);
-        header('Location: login.php');
+        header('Location: index.php');
         exit();
     }
 }
