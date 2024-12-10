@@ -1,20 +1,29 @@
 <?php
 require_once('includes/load.php');
-
-
-
 require 'vendor/autoload.php'; // Include Composer's autoloader
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+session_start();
+
+// Create a MySQLi connection
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// Check connection
+if ($mysqli->connect_error) {
+    die('Connection failed: ' . $mysqli->connect_error);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['forgot_email'];
 
     // Check if the email exists in the database
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
+    $stmt = $mysqli->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
     if ($user) {
         // Generate a unique token
@@ -22,8 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $token_expired_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token valid for 1 hour
 
         // Update the database with the token and expiration time
-        $stmt = $pdo->prepare("UPDATE users SET token = :token, reset_token_at = :reset_token_at WHERE email = :email");
-        $stmt->execute(['token' => $token, 'reset_token_at' => $token_expired_at, 'email' => $email]);
+        $stmt = $mysqli->prepare("UPDATE users SET token = ?, reset_token_at = ? WHERE email = ?");
+        $stmt->bind_param('sss', $token, $token_expired_at, $email);
+        $stmt->execute();
 
         // Send the reset email using PHPMailer
         $mail = new PHPMailer(true);
@@ -69,4 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: index.php'); // Change 'index.php' to your main page
     exit();
 }
+
+$mysqli->close();
 ?>
