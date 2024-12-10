@@ -1,26 +1,4 @@
-<?php
-ob_start();
-require_once('includes/load.php');
 
-// Redirect if user is not authenticated to reset password
-if (!$session->isUserLoggedIn()) {
-    redirect('login.php', false);
-}
-
-// Security headers
-header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-Content-Type-Options: nosniff");
-header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Permissions-Policy: geolocation=(self), microphone=()");
-
-// Check for session messages
-$message = null;
-if (isset($_SESSION['message'])) {
-    $message = json_decode($_SESSION['message'], true);
-    unset($_SESSION['message']);
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
