@@ -12,7 +12,12 @@ if ($mysqli->connect_error) {
 
 // Check if token is provided
 if (!isset($_GET['token'])) {
-    die('Invalid request.');
+    $_SESSION['message'] = json_encode([
+        'type' => 'error',
+        'text' => 'Invalid request.'
+    ]);
+    header('Location: index.php');
+    exit();
 }
 
 $token = $_GET['token'];
@@ -25,7 +30,12 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 if (!$user || new DateTime() > new DateTime($user['reset_token_at'])) {
-    die('Invalid or expired token.');
+    $_SESSION['message'] = json_encode([
+        'type' => 'error',
+        'text' => 'Invalid or expired token.'
+    ]);
+    header('Location: index.php');
+    exit();
 }
 
 // Handle form submission
@@ -34,9 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_new_password'];
 
     if ($newPassword !== $confirmPassword) {
-        $_SESSION['error'] = 'Passwords do not match.';
+        $_SESSION['message'] = json_encode([
+            'type' => 'error',
+            'text' => 'Passwords do not match.'
+        ]);
         header('Location: new_password.php?token=' . urlencode($token));
-        exit;
+        exit();
     } else {
         // Hash the new password
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
@@ -46,14 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('si', $hashedPassword, $user['id']);
         $stmt->execute();
 
-        // Redirect or show success message
-        $_SESSION['success'] = 'Password has been reset successfully.';
-        header('Location: index.php');
-        exit;
+        $_SESSION['message'] = json_encode([
+            'type' => 'success',
+            'text' => 'Password has been reset successfully.'
+        ]);
+        header('Location: login.php');
+        exit();
     }
 }
 
-// Close the statement and connection
-$stmt->close();
 $mysqli->close();
 ?>
