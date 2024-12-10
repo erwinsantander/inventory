@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Port       = 587;
 
             // Recipients
-            $mail->setFrom('your-email@gmail.com', 'Your Name');
+            $mail->setFrom('montgomeryaurelia06@gmail.com', 'Inventory Management System');
             $mail->addAddress($email);
 
             // Content
