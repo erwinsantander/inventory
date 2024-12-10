@@ -5,6 +5,13 @@
   page_require_level(2);
   $all_categories = find_all('categories');
   $all_photo = find_all('media');
+
+  $request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 ?>
 <?php
  if(isset($_POST['add_product'])){
