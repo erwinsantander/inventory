@@ -1,6 +1,6 @@
 <?php
 require_once('includes/load.php');
-session_start();
+
 
 // Check if token is provided
 if (!isset($_GET['token'])) {
