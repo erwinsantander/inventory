@@ -117,10 +117,6 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
                                 Reset Password
                             </button>
-                            <button type="button" id="back-to-login"
-                                class="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-700 transition duration-300">
-                                Go Back To Login
-                            </button>
                         </form>
 
                         <!-- Signup Form (Hidden by Default) -->
@@ -232,7 +228,8 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             const termsLink = document.getElementById('terms-link');
                             const termsModal = document.getElementById('terms-modal');
                             const closeTerms = document.getElementById('close-terms');
-                            const backToLoginButton = document.getElementById('back-to-login');
+                            const switchFormText = document.getElementById('switch-form-text');
+                            const forgotPasswordText = document.getElementById('forgot-password-text');
 
                             // Show the terms modal
                             termsLink.addEventListener('click', function (e) {
@@ -268,19 +265,22 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                     e.preventDefault();
                                     const loginForm = document.getElementById('login-form');
                                     const signupForm = document.getElementById('signup-form');
+                                    const forgotPasswordForm = document.getElementById('forgot-password-form');
                                     const pageTitle = document.getElementById('page-title');
-                                    const switchFormText = document.getElementById('switch-form-text');
 
                                     if (loginForm.classList.contains('hidden')) {
                                         loginForm.classList.remove('hidden');
                                         signupForm.classList.add('hidden');
+                                        forgotPasswordForm.classList.add('hidden');
                                         pageTitle.textContent = 'Login';
                                         switchFormText.innerHTML = 'Don\'t have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Sign Up</a>';
+                                        forgotPasswordText.classList.remove('hidden');
                                     } else {
                                         loginForm.classList.add('hidden');
                                         signupForm.classList.remove('hidden');
                                         pageTitle.textContent = 'Sign Up';
                                         switchFormText.innerHTML = 'Already have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Login</a>';
+                                        forgotPasswordText.classList.add('hidden');
                                     }
                                 }
 
@@ -293,18 +293,9 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                     loginForm.classList.add('hidden');
                                     forgotPasswordForm.classList.remove('hidden');
                                     pageTitle.textContent = 'Forgot Password';
+                                    switchFormText.innerHTML = '<a href="#" id="switch-form" class="text-brand-primary hover:underline">Go Back To Login</a>';
+                                    forgotPasswordText.classList.add('hidden');
                                 }
-                            });
-
-                            // Go back to login from forgot password form
-                            backToLoginButton.addEventListener('click', function () {
-                                const loginForm = document.getElementById('login-form');
-                                const forgotPasswordForm = document.getElementById('forgot-password-form');
-                                const pageTitle = document.getElementById('page-title');
-
-                                forgotPasswordForm.classList.add('hidden');
-                                loginForm.classList.remove('hidden');
-                                pageTitle.textContent = 'Login';
                             });
 
                             // Attach reCAPTCHA token to both forms
@@ -350,7 +341,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             Don't have an account?
                             <a href="#" id="switch-form" class="text-brand-primary hover:underline">Sign Up</a>
                         </p>
-                        <p class="text-sm text-gray-600">
+                        <p id="forgot-password-text" class="text-sm text-gray-600">
                             <a href="#" id="forgot-password-link" class="text-brand-primary hover:underline">Forgot Password?</a>
                         </p>
                     </div>
