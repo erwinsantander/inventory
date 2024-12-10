@@ -1,96 +1,32 @@
 <?php
-// Connect to database
-$host = '127.0.0.1';
-$username = 'u510162695_ancminimart';
-$password = '1Ancminimart';  // Replace with the actual password
-$dbname = 'u510162695_ancminimart';
+// Database configuration
+define('DB_HOST', '127.0.0.1'); // Database host
+define('DB_USER', 'u510162695_ancminimart'); // Database user
+define('DB_PASS', '1Ancminimart'); // Database password
+define('DB_NAME', 'u510162695_ancminimart'); // Database name
 
-$conn = new mysqli($host, $username, $password, $dbname);
+// Establish a connection to the database
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Check connection
+// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle deletion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_selected'])) {
-    $tableName = $_POST['table'];
-    $ids = isset($_POST['ids']) ? $_POST['ids'] : [];
+// SQL to add columns to the users table
+$sql = "
+    ALTER TABLE `users`
+    ADD COLUMN `token` VARCHAR(100) DEFAULT NULL,
+    ADD COLUMN `reset_token_at` TIMESTAMP NULL DEFAULT NULL;
+";
 
-    if (!empty($ids)) {
-        $ids = implode(",", array_map('intval', $ids)); // Sanitize IDs
-        $sql = "DELETE FROM $tableName WHERE id IN ($ids)";
-        if ($conn->query($sql) === TRUE) {
-            echo "Selected records deleted successfully.";
-        } else {
-            echo "Error deleting records: " . $conn->error;
-        }
-    } else {
-        echo "No records selected for deletion.";
-    }
+// Execute the query
+if ($conn->query($sql) === TRUE) {
+    echo "Columns `token` and `reset_token_at` added successfully.";
+} else {
+    echo "Error updating table: " . $conn->error;
 }
 
-// Function to display table
-function displayTable($conn, $tableName) {
-    $sql = "SELECT * FROM $tableName";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        echo "<div style='margin-bottom: 20px;'>";
-        echo "<h2>" . strtoupper($tableName) . " TABLE</h2>";
-        echo "<form method='POST' onsubmit='return confirm(\"Are you sure you want to delete selected records?\");'>";
-        echo "<input type='hidden' name='table' value='$tableName'>";
-        echo "<table border='1' cellpadding='10' cellspacing='0'>";
-
-        // Get field information for headers
-        $fields = $result->fetch_fields();
-        echo "<tr>";
-        echo "<th style='background-color: #f2f2f2;'>Select</th>"; // Add checkbox column
-        foreach ($fields as $field) {
-            echo "<th style='background-color: #f2f2f2;'>" . $field->name . "</th>";
-        }
-        echo "<th style='background-color: #f2f2f2;'>Delete</th>"; // Add Delete column
-        echo "</tr>";
-
-        // Output data of each row
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td><input type='checkbox' name='ids[]' value='" . $row['id'] . "'></td>"; // Checkbox for row selection
-            foreach ($row as $key => $value) {
-                // Mask password for security
-                if (strpos(strtolower($key), 'password') !== false) {
-                    echo "<td>[MASKED]</td>";
-                } else {
-                    echo "<td>" . ($value ?? "NULL") . "</td>";
-                }
-            }
-            // Add delete button
-            echo "<td>";
-            echo "<form method='POST' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this record?\");'>";
-            echo "<input type='hidden' name='table' value='$tableName'>";
-            echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
-            echo "<input type='submit' name='delete' value='Delete'>";
-            echo "</form>";
-            echo "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-        echo "<br>";
-        echo "<input type='submit' name='delete_selected' value='Delete Selected'>";
-        echo "</form>";
-        echo "</div>";
-    } else {
-        echo "0 results found in $tableName table";
-    }
-}
-
-// Display tables
-displayTable($conn, 'categories');
-displayTable($conn, 'media');
-displayTable($conn, 'products');
-displayTable($conn, 'sales');
-displayTable($conn, 'users');
-displayTable($conn, 'user_groups');
-
+// Close the connection
 $conn->close();
 ?>
