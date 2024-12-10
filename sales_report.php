@@ -3,6 +3,13 @@ $page_title = 'Sale Report';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
    page_require_level(3);
+
+   $request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
