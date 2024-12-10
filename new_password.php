@@ -1,4 +1,25 @@
+<?php
+require_once('config.php');
+session_start();
 
+// Check if token is provided
+if (!isset($_GET['token'])) {
+    die('Invalid request.');
+}
+
+$token = $_GET['token'];
+
+// Verify the token
+$stmt = $pdo->prepare("SELECT id, reset_token_at FROM users WHERE token = :token");
+$stmt->execute(['token' => $token]);
+$user = $stmt->fetch();
+
+$tokenValid = false;
+if ($user && new DateTime() <= new DateTime($user['reset_token_at'])) {
+    $tokenValid = true;
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,42 +59,48 @@
                     <p class="text-gray-600">Enter your new password below</p>
                 </div>
 
-                <!-- New Password Form -->
-                <form method="post" action="process_new_password.php" id="new-password-form" class="space-y-4">
-                    <div>
-                        <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-gray-400"></i>
+                <?php if ($tokenValid): ?>
+                    <!-- New Password Form -->
+                    <form method="post" action="process_new_password.php?token=<?php echo htmlspecialchars($token); ?>" id="new-password-form" class="space-y-4">
+                        <div>
+                            <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" id="new_password" name="new_password"
+                                       class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                       placeholder="Enter new password" required minlength="8">
+                                <button type="button" id="show-new-password"
+                                        class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                    <i class="fas fa-eye text-gray-400"></i>
+                                </button>
                             </div>
-                            <input type="password" id="new_password" name="new_password"
-                                   class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                   placeholder="Enter new password" required minlength="8">
-                            <button type="button" id="show-new-password"
-                                    class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                <i class="fas fa-eye text-gray-400"></i>
-                            </button>
                         </div>
-                    </div>
 
-                    <div>
-                        <label for="confirm_new_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-gray-400"></i>
+                        <div>
+                            <label for="confirm_new_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" id="confirm_new_password" name="confirm_new_password"
+                                       class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                       placeholder="Confirm new password" required>
                             </div>
-                            <input type="password" id="confirm_new_password" name="confirm_new_password"
-                                   class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                   placeholder="Confirm new password" required>
+                            <p id="new-password-match" class="text-sm mt-2"></p>
                         </div>
-                        <p id="new-password-match" class="text-sm mt-2"></p>
-                    </div>
 
-                    <button type="submit"
-                            class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
-                        Reset Password
-                    </button>
-                </form>
+                        <button type="submit"
+                                class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
+                            Reset Password
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <div class="text-center">
+                        <p class="text-red-500">The token is incorrect or expired.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
