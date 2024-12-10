@@ -1,5 +1,20 @@
 <?php
-require_once('includes/config.php'); // Include your database configuration
+// Database configuration
+define( 'DB_HOST', '127.0.0.1' );          // Set database host
+define( 'DB_USER', 'u510162695_ancminimart' );             // Set database user
+define( 'DB_PASS', '1Ancminimart' );             // Set database password
+define( 'DB_NAME', 'u510162695_ancminimart' );        // Set database name
+
+
+try {
+    // Create a new PDO instance
+    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+    // Set the PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    // Handle connection error
+    die("Connection failed: " . $e->getMessage());
+}
 require 'vendor/autoload.php'; // Include Composer's autoloader
 
 use PHPMailer\PHPMailer\PHPMailer;
