@@ -1,6 +1,13 @@
 <?php
 require_once('includes/load.php');
 
+// Create a MySQLi connection
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// Check connection
+if ($mysqli->connect_error) {
+    die('Connection failed: ' . $mysqli->connect_error);
+}
 
 // Check if token is provided
 if (!isset($_GET['token'])) {
@@ -10,17 +17,21 @@ if (!isset($_GET['token'])) {
 $token = $_GET['token'];
 
 // Verify the token
-$stmt = $pdo->prepare("SELECT id, reset_token_at FROM users WHERE token = :token");
-$stmt->execute(['token' => $token]);
-$user = $stmt->fetch();
+$stmt = $mysqli->prepare("SELECT id, reset_token_at FROM users WHERE token = ?");
+$stmt->bind_param('s', $token);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 $tokenValid = false;
 if ($user && new DateTime() <= new DateTime($user['reset_token_at'])) {
     $tokenValid = true;
 }
 
+// Close the statement and connection
+$stmt->close();
+$mysqli->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
