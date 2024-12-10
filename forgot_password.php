@@ -1,8 +1,6 @@
 <?php
 require_once('includes/load.php');
 
-session_start(); // Start the session to use session variables
-
 
 
 require 'vendor/autoload.php'; // Include Composer's autoloader
