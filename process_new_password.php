@@ -1,5 +1,5 @@
 <?php
-require_once('config.php');
+require_once('includes/load.php');
 session_start();
 
 // Check if token is provided
