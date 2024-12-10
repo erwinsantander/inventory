@@ -117,6 +117,10 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 class="w-full bg-brand-secondary text-white py-2 rounded-md hover:bg-green-700 transition duration-300">
                                 Reset Password
                             </button>
+                            <button type="button" id="back-to-login"
+                                class="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-700 transition duration-300">
+                                Go Back To Login
+                            </button>
                         </form>
 
                         <!-- Signup Form (Hidden by Default) -->
@@ -228,6 +232,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             const termsLink = document.getElementById('terms-link');
                             const termsModal = document.getElementById('terms-modal');
                             const closeTerms = document.getElementById('close-terms');
+                            const backToLoginButton = document.getElementById('back-to-login');
 
                             // Show the terms modal
                             termsLink.addEventListener('click', function (e) {
@@ -253,80 +258,91 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                     termsError.classList.add('hidden');
                                 }
                             });
-                        });
 
-                        // Switch between Login, Signup, and Forgot Password
-                        document.addEventListener('click', function (e) {
-                            const switchFormLink = e.target.closest('#switch-form');
-                            const forgotPasswordLink = e.target.closest('#forgot-password-link');
+                            // Switch between Login, Signup, and Forgot Password
+                            document.addEventListener('click', function (e) {
+                                const switchFormLink = e.target.closest('#switch-form');
+                                const forgotPasswordLink = e.target.closest('#forgot-password-link');
 
-                            if (switchFormLink) {
-                                e.preventDefault();
-                                const loginForm = document.getElementById('login-form');
-                                const signupForm = document.getElementById('signup-form');
-                                const pageTitle = document.getElementById('page-title');
-                                const switchFormText = document.getElementById('switch-form-text');
+                                if (switchFormLink) {
+                                    e.preventDefault();
+                                    const loginForm = document.getElementById('login-form');
+                                    const signupForm = document.getElementById('signup-form');
+                                    const pageTitle = document.getElementById('page-title');
+                                    const switchFormText = document.getElementById('switch-form-text');
 
-                                if (loginForm.classList.contains('hidden')) {
-                                    loginForm.classList.remove('hidden');
-                                    signupForm.classList.add('hidden');
-                                    pageTitle.textContent = 'Login';
-                                    switchFormText.innerHTML = 'Don\'t have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Sign Up</a>';
-                                } else {
-                                    loginForm.classList.add('hidden');
-                                    signupForm.classList.remove('hidden');
-                                    pageTitle.textContent = 'Sign Up';
-                                    switchFormText.innerHTML = 'Already have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Login</a>';
+                                    if (loginForm.classList.contains('hidden')) {
+                                        loginForm.classList.remove('hidden');
+                                        signupForm.classList.add('hidden');
+                                        pageTitle.textContent = 'Login';
+                                        switchFormText.innerHTML = 'Don\'t have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Sign Up</a>';
+                                    } else {
+                                        loginForm.classList.add('hidden');
+                                        signupForm.classList.remove('hidden');
+                                        pageTitle.textContent = 'Sign Up';
+                                        switchFormText.innerHTML = 'Already have an account? <a href="#" id="switch-form" class="text-brand-primary hover:underline">Login</a>';
+                                    }
                                 }
-                            }
 
-                            if (forgotPasswordLink) {
-                                e.preventDefault();
+                                if (forgotPasswordLink) {
+                                    e.preventDefault();
+                                    const loginForm = document.getElementById('login-form');
+                                    const forgotPasswordForm = document.getElementById('forgot-password-form');
+                                    const pageTitle = document.getElementById('page-title');
+
+                                    loginForm.classList.add('hidden');
+                                    forgotPasswordForm.classList.remove('hidden');
+                                    pageTitle.textContent = 'Forgot Password';
+                                }
+                            });
+
+                            // Go back to login from forgot password form
+                            backToLoginButton.addEventListener('click', function () {
                                 const loginForm = document.getElementById('login-form');
                                 const forgotPasswordForm = document.getElementById('forgot-password-form');
                                 const pageTitle = document.getElementById('page-title');
 
-                                loginForm.classList.add('hidden');
-                                forgotPasswordForm.classList.remove('hidden');
-                                pageTitle.textContent = 'Forgot Password';
-                            }
-                        });
+                                forgotPasswordForm.classList.add('hidden');
+                                loginForm.classList.remove('hidden');
+                                pageTitle.textContent = 'Login';
+                            });
 
-                        // Attach reCAPTCHA token to both forms
-                        function attachRecaptchaToken(formId, action) {
-                            const form = document.getElementById(formId);
+                            // Attach reCAPTCHA token to both forms
+                            function attachRecaptchaToken(formId, action) {
+                                const form = document.getElementById(formId);
 
-                            form.addEventListener('submit', function(event) {
-                                event.preventDefault();
-                                grecaptcha.ready(function() {
-                                    grecaptcha.execute('6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF', { action: action }).then(function(token) {
-                                        const recaptchaInput = document.getElementById('recaptcha_token');
-                                        recaptchaInput.value = token;
-                                        form.submit();
+                                form.addEventListener('submit', function(event) {
+                                    event.preventDefault();
+                                    grecaptcha.ready(function() {
+                                        grecaptcha.execute('6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF', { action: action }).then(function(token) {
+                                            const recaptchaInput = document.getElementById('recaptcha_token');
+                                            recaptchaInput.value = token;
+                                            form.submit();
+                                        });
                                     });
                                 });
-                            });
-                        }
+                            }
 
-                        document.addEventListener('DOMContentLoaded', function() {
-                            attachRecaptchaToken('login-form', 'login');
-                            attachRecaptchaToken('signup-form', 'signup');
+                            document.addEventListener('DOMContentLoaded', function() {
+                                attachRecaptchaToken('login-form', 'login');
+                                attachRecaptchaToken('signup-form', 'signup');
+                            });
+
+                            function setupPasswordToggle(passwordId, toggleButtonId) {
+                                const passwordField = document.getElementById(passwordId);
+                                const toggleButton = document.getElementById(toggleButtonId);
+                                const icon = toggleButton.querySelector('i');
+                                toggleButton.addEventListener('click', function () {
+                                    const type = passwordField.type === 'password' ? 'text' : 'password';
+                                    passwordField.type = type;
+                                    icon.classList.toggle('fa-eye');
+                                    icon.classList.toggle('fa-eye-slash');
+                                });
+                            }
+
+                            setupPasswordToggle('password', 'show-password');
+                            setupPasswordToggle('signup_password', 'show-signup-password');
                         });
-
-                        function setupPasswordToggle(passwordId, toggleButtonId) {
-                            const passwordField = document.getElementById(passwordId);
-                            const toggleButton = document.getElementById(toggleButtonId);
-                            const icon = toggleButton.querySelector('i');
-                            toggleButton.addEventListener('click', function () {
-                                const type = passwordField.type === 'password' ? 'text' : 'password';
-                                passwordField.type = type;
-                                icon.classList.toggle('fa-eye');
-                                icon.classList.toggle('fa-eye-slash');
-                            });
-                        }
-
-                        setupPasswordToggle('password', 'show-password');
-                        setupPasswordToggle('signup_password', 'show-signup-password');
                     </script>
 
                     <div class="text-center mt-4">
