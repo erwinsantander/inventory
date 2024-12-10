@@ -1,6 +1,14 @@
 <?php
 require_once('includes/load.php');
+session_start();
 
+// Create a MySQLi connection
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// Check connection
+if ($mysqli->connect_error) {
+    die('Connection failed: ' . $mysqli->connect_error);
+}
 
 // Check if token is provided
 if (!isset($_GET['token'])) {
@@ -10,9 +18,11 @@ if (!isset($_GET['token'])) {
 $token = $_GET['token'];
 
 // Verify the token
-$stmt = $pdo->prepare("SELECT id, reset_token_at FROM users WHERE token = :token");
-$stmt->execute(['token' => $token]);
-$user = $stmt->fetch();
+$stmt = $mysqli->prepare("SELECT id, reset_token_at FROM users WHERE token = ?");
+$stmt->bind_param('s', $token);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 if (!$user || new DateTime() > new DateTime($user['reset_token_at'])) {
     die('Invalid or expired token.');
@@ -32,8 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
         // Update the password in the database and remove the token
-        $stmt = $pdo->prepare("UPDATE users SET password = :password, token = NULL, reset_token_at = NULL WHERE id = :id");
-        $stmt->execute(['password' => $hashedPassword, 'id' => $user['id']]);
+        $stmt = $mysqli->prepare("UPDATE users SET password = ?, token = NULL, reset_token_at = NULL WHERE id = ?");
+        $stmt->bind_param('si', $hashedPassword, $user['id']);
+        $stmt->execute();
 
         // Redirect or show success message
         $_SESSION['success'] = 'Password has been reset successfully.';
@@ -41,4 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
+// Close the statement and connection
+$stmt->close();
+$mysqli->close();
 ?>
