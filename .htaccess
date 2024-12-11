@@ -12,5 +12,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Check if the requested file is not a file
 RewriteCond %{REQUEST_FILENAME} !-f
 
-# Rewrite rule to add .php extension internally
-RewriteRule ^([^/.]+)$ $1.php [L]
+# Internally rewrite the URL to append .php extension
+RewriteRule ^([^/]+)$ $1.php [L]
