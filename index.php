@@ -219,50 +219,69 @@ if (isset($_SESSION['message'])) {
                 </div>
 
                 <!-- Terms and Conditions Modal -->
-                <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                    <div class="bg-white rounded-lg w-11/12 max-w-lg p-6">
-                        <h2 class="text-xl font-bold mb-4">Terms and Conditions for ANC Mini Mart
-Welcome to ANC Mini Mart! By using our website (ancminimart.com), you agree to the following terms and conditions. Please read them carefully.
-</h2>
-                        <div class="overflow-y-auto max-h-64">
-                            <p class="text-gray-600 mb-4">
-                            
-1. General Use
-By accessing our website, you confirm that you are at least 18 years old or have parental/guardian consent.
-These terms apply to all users of ancminimart.com.
-2. Products and Services
-Products listed on the website are subject to availability.
-Prices are accurate at the time of posting but may change without prior notice.
-ANC Mini Mart reserves the right to limit or refuse orders at our discretion.
-3. Payments
-Payments must be made at checkout using the accepted methods listed on the website.
-All payment details are securely processed and not stored by ANC Mini Mart.
-4. Shipping and Delivery
-Delivery times are estimates and may vary due to unforeseen circumstances.
-Customers are responsible for providing accurate shipping details. ANC Mini Mart is not liable for failed deliveries due to incorrect addresses.
-5. Returns and Refunds
-Items may be returned within 14 days of delivery if they meet our return policy.
-Refunds are processed after inspecting the returned item and may take 5-7 business days.
-6. User Conduct
-Do not misuse the website by introducing viruses or malicious software.
-ANC Mini Mart reserves the right to restrict access to users who violate these terms.
-7. Privacy Policy
-By using ancminimart.com, you agree to our Privacy Policy, which outlines how we collect, use, and protect your data.
-8. Limitation of Liability
-ANC Mini Mart is not liable for any damages arising from the use of our website, including errors, interruptions, or loss of data.
-9. Intellectual Property
-All content on the website, including text, images, and logos, is the property of ANC Mini Mart and protected by copyright laws. Unauthorized use is prohibited.
-10. Changes to Terms
-ANC Mini Mart reserves the right to modify these terms at any time. Changes will be posted on this page
-                            </p>
-                        </div>
-                        <div class="flex justify-end mt-4">
-                            <button id="close-terms" class="px-4 py-2 bg-brand-primary text-white rounded hover:bg-red-700 transition duration-300">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg w-11/12 max-w-lg p-6">
+        <h2 class="text-xl font-bold mb-4">Terms and Conditions</h2>
+        <div class="overflow-y-auto max-h-64">
+            <p class="text-gray-600 mb-4">
+                <strong>Terms and Conditions for ANC Mini Mart</strong><br>
+                Welcome to ANC Mini Mart! By using our website (ancminimart.com), you agree to the following terms and conditions. Please read them carefully.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>1. General Use</strong><br>
+                By accessing our website, you confirm that you are at least 18 years old or have parental/guardian consent.<br>
+                These terms apply to all users of ancminimart.com.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>2. Products and Services</strong><br>
+                Products listed on the website are subject to availability.<br>
+                Prices are accurate at the time of posting but may change without prior notice.<br>
+                ANC Mini Mart reserves the right to limit or refuse orders at our discretion.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>3. Payments</strong><br>
+                Payments must be made at checkout using the accepted methods listed on the website.<br>
+                All payment details are securely processed and not stored by ANC Mini Mart.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>4. Shipping and Delivery</strong><br>
+                Delivery times are estimates and may vary due to unforeseen circumstances.<br>
+                Customers are responsible for providing accurate shipping details. ANC Mini Mart is not liable for failed deliveries due to incorrect addresses.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>5. Returns and Refunds</strong><br>
+                Items may be returned within 14 days of delivery if they meet our return policy.<br>
+                Refunds are processed after inspecting the returned item and may take 5-7 business days.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>6. User Conduct</strong><br>
+                Do not misuse the website by introducing viruses or malicious software.<br>
+                ANC Mini Mart reserves the right to restrict access to users who violate these terms.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>7. Privacy Policy</strong><br>
+                By using ancminimart.com, you agree to our Privacy Policy, which outlines how we collect, use, and protect your data.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>8. Limitation of Liability</strong><br>
+                ANC Mini Mart is not liable for any damages arising from the use of our website, including errors, interruptions, or loss of data.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>9. Intellectual Property</strong><br>
+                All content on the website, including text, images, and logos, is the property of ANC Mini Mart and protected by copyright laws. Unauthorized use is prohibited.
+            </p>
+            <p class="text-gray-600 mb-4">
+                <strong>10. Changes to Terms</strong><br>
+                ANC Mini Mart reserves the right to modify these terms at any time. Changes will be posted on this page.
+            </p>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button id="close-terms" class="px-4 py-2 bg-brand-primary text-white rounded hover:bg-red-700 transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
