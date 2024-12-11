@@ -1,16 +1,4 @@
 # HTID:23422420: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
-
 php_value display_errors 1
-
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
-RewriteEngine On
-
-# Check if the requested file is not a directory
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Check if the requested file is not a file
-RewriteCond %{REQUEST_FILENAME} !-f
-
-# Internally rewrite the URL to append .php extension
-RewriteRule ^([^/]+)$ $1.php [L]

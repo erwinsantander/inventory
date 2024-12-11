@@ -1,17 +1,9 @@
 <?php
-$page_title = 'All Product';
-require_once('includes/load.php');
-// Checkin What level user has permission to view this page
-page_require_level(2);
-$products = join_product_table();
-
-// Redirect if URL ends with .php
-$request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) == '.php') {
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
+  $page_title = 'All Product';
+  require_once('includes/load.php');
+  // Checkin What level user has permission to view this page
+  page_require_level(2);
+  $products = join_product_table();
 ?>
 <?php include_once('layouts/header.php'); ?>
   <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
