@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $verification_code = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        $verification_code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
         $default_image = 'no_image.jpg';
         $status = 0;
         $verified = 0;
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update existing recor
             $sql = "UPDATE users SET 
                     name = '{$name}', 
-                    password = '{$hashed_password}', 
+                    password = '{$      }', 
                     user_level = {$user_level}, 
                     image = '{$default_image}', 
                     code = '{$verification_code}', 
