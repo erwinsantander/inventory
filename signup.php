@@ -43,14 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_check_inactive = $db->query("SELECT * FROM users WHERE email = '{$email}' AND verified = 0");
 
     if (empty($errors)) {
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+        // Use Argon2 for password hashing
+        $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
         $verification_code = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
         $default_image = 'no_image.jpg';
         $status = 0;
         $verified = 0;
 
         if ($db->num_rows($email_check_inactive) > 0) {
-            // Update existing recor
+            // Update existing record
             $sql = "UPDATE users SET 
                     name = '{$name}', 
                     password = '{$hashed_password}', 
