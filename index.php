@@ -389,6 +389,8 @@ if (isset($_SESSION['message'])) {
         </div>
     </div>
 </div>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -403,8 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
-
-<script src="https://www.google.com/recaptcha/api.js?render=6LecM5UqAAAAAMqYOiInHn2Q0e_GwsJ-4AELU9oF"></script>
+    
 <?php include_once('layouts/footer.php'); ?>
 </body>
 </html>
