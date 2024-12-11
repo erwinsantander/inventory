@@ -59,13 +59,13 @@ if (isset($_SESSION['message'])) {
                 <div class="p-6">
                     <div class="text-center mb-6">
                         <h1 class="text-3xl font-bold text-brand-primary mb-2">Verify Account</h1>
-                        <p class="text-gray-600 mb-4">Please enter the 5-digit code sent to your email</p>
+                        <p class="text-gray-600 mb-4">Please enter the 6-digit code sent to your email</p>
                     </div>
                     
                     <form method="post" action="process_verification.php" class="space-y-6">
                         <!-- Verification Code Input Fields -->
                         <div class="flex justify-center space-x-2">
-                            <?php for($i = 0; $i < 5; $i++): ?>
+                            <?php for($i = 0; $i < 6; $i++): ?>
                                 <input type="text" 
                                        maxlength="1" 
                                        class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-brand-primary focus:outline-none" 
