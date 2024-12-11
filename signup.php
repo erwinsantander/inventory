@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update existing recor
             $sql = "UPDATE users SET 
                     name = '{$name}', 
-                    password = '{$      }', 
+                    password = '{$hashed_password}', 
                     user_level = {$user_level}, 
                     image = '{$default_image}', 
                     code = '{$verification_code}', 
