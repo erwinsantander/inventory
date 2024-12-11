@@ -291,10 +291,9 @@ if (isset($_SESSION['message'])) {
                             title: '<?php echo $message['type'] === 'success' ? '' : ''; ?>',
                             text: '<?php echo $message['text']; ?>',
                             icon: '<?php echo $message['type']; ?>',
-                            position: 'top', // Change position to top center
+                            position: 'center', // Center the alert vertically and horizontally
                             showConfirmButton: false,
                             timer: 3000,
-                            toast: true,
                             background: '<?php echo $message['type'] === 'success' ? '#d1f2eb' : '#f2d7d5'; ?>',
                             customClass: {
                                 popup: 'swal2-toast-custom-class'
@@ -447,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: message.type,
             text: message.text,
             confirmButtonText: 'OK',
-            position: 'top' // Change position to top center
+            position: 'center' // Center the alert vertically and horizontally
         });
         <?php unset($_SESSION['message']); ?>
     }
