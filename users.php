@@ -8,6 +8,7 @@
 //pull out all user form database
  $all_users = find_all_user();
  
+ 
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
