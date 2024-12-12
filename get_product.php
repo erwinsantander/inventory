@@ -2,8 +2,8 @@
 // Database connection configuration
 $host = '127.0.0.1';
 $dbname = 'u510162695_ancminimart';
-$username = '1Ancminimart';
-$password = 'u510162695_ancminimart';
+$username = 'u510162695_ancminimart';
+$password = '1Ancminimart';
 
 
 try {
