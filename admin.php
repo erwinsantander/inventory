@@ -259,18 +259,18 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-<!-- Monthly Sales Line Chart -->
+<!-- Products Added Per Month Line Chart -->
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>Monthly Sales (Line Chart)</span>
+          <span>Products Added Per Month (Line Chart)</span>
         </strong>
       </div>
       <div class="panel-body">
-        <canvas id="monthlySalesLineChart" width="400" height="200"></canvas>
+        <canvas id="productsAddedChart" width="400" height="200"></canvas>
       </div>
     </div>
   </div>
@@ -278,52 +278,76 @@ var pieChart = new Chart(pieCtx, {
 
 <script>
   <?php
-  // Use the same data from your existing monthly sales logic
-  $lineLabels = $labels; // Labels for each month
-  $lineData = $chartData; // Total sales for each month
+  // Prepare data for the line chart
+  $year = 2024; // Adjust as needed
+  $months = [
+    '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr', '05' => 'May', '06' => 'Jun',
+    '07' => 'Jul', '08' => 'Aug', '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'
+  ];
+
+  $labels = [];
+  $productData = [];
+
+  foreach ($months as $num => $name) {
+    $labels[] = "$name $year";
+    $productData[$num] = 0; // Initialize with 0
+  }
+
+  // Fetch products added per month
+  $monthly_products = get_products_added_per_month($year); // Replace with your query logic
+  while ($row = $monthly_products->fetch_assoc()) {
+    $month = str_pad($row['month'], 2, '0', STR_PAD_LEFT);
+    $productData[$month] = (int)$row['total_added'];
+  }
+
+  // Flatten data for the chart
+  $chartProductData = [];
+  foreach ($months as $num => $name) {
+    $chartProductData[] = $productData[$num] ?? 0;
+  }
   ?>
 
-  var lineCtx = document.getElementById('monthlySalesLineChart').getContext('2d');
+  var lineCtx = document.getElementById('productsAddedChart').getContext('2d');
   var lineChart = new Chart(lineCtx, {
     type: 'line',
     data: {
-      labels: <?php echo json_encode($lineLabels); ?>,
+      labels: <?php echo json_encode($labels); ?>,
       datasets: [{
-        label: 'Total Sales (₱)',
-        data: <?php echo json_encode($lineData); ?>,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        label: 'Products Added',
+        data: <?php echo json_encode($chartProductData); ?>,
+        fill: false,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-        pointBorderColor: '#fff',
+        tension: 0.3,
+        pointStyle: 'circle',
         pointRadius: 5,
-        fill: true
+        pointHoverRadius: 7
       }]
     },
     options: {
       responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Sales (₱)'
-          }
+      plugins: {
+        title: {
+          display: true,
+          text: 'Products Added Per Month for 2024'
         },
+        legend: {
+          display: false
+        }
+      },
+      scales: {
         x: {
           title: {
             display: true,
             text: 'Months'
           }
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top',
         },
-        title: {
-          display: true,
-          text: 'Total Sales Per Month (2024)'
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Products Added'
+          }
         }
       }
     }
