@@ -210,7 +210,7 @@
                         const currentQuantity = existingProduct ? existingProduct.quantity : 0;
 
                         if (currentQuantity + 1 > product.quantity) {
-                            errorMessageElement.textContent = 'Requested quantity exceeds available stock';
+                            errorMessageElement.textContent = 'Requested quantity exceeds available stock or either the product is out of stock!';
                         } else {
                             addToCart(product);
                         }
