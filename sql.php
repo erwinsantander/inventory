@@ -13,14 +13,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to add a new column
-$sql = "ALTER TABLE users ADD COLUMN alternative_email VARCHAR(255)";
+// Fetch column names dynamically
+$sql = "SHOW COLUMNS FROM users";
+$columnsResult = $conn->query($sql);
 
-// Execute the query
-if ($conn->query($sql) === TRUE) {
-    echo "Column 'alternative_email' added successfully.";
+if ($columnsResult->num_rows > 0) {
+    // Output table headers
+    echo "<table border='1'><tr>";
+    $columns = [];
+    while ($column = $columnsResult->fetch_assoc()) {
+        echo "<th>" . $column['Field'] . "</th>";
+        $columns[] = $column['Field']; // Save column names for data display
+    }
+    echo "</tr>";
+
+    // Fetch and display data
+    $dataSql = "SELECT * FROM users";
+    $dataResult = $conn->query($dataSql);
+
+    if ($dataResult->num_rows > 0) {
+        while ($row = $dataResult->fetch_assoc()) {
+            echo "<tr>";
+            foreach ($columns as $col) {
+                echo "<td>" . $row[$col] . "</td>";
+            }
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='" . count($columns) . "'>No data available</td></tr>";
+    }
+    echo "</table>";
 } else {
-    echo "Error adding column: " . $conn->error;
+    echo "The users table doesn't exist or has no columns.";
 }
 
 // Close connection
