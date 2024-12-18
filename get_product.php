@@ -33,7 +33,7 @@ try {
         if ($requested_quantity > $product['quantity']) {
             // Requested quantity exceeds available stock
             header('HTTP/1.1 400 Bad Request');
-            echo json_encode(['error' => 'Requested quantity exceeds available stock']);
+            echo json_encode(['error' => 'Out of Stock']);
         } else {
             // Return product details
             echo json_encode($product);
