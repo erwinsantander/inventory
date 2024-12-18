@@ -259,7 +259,7 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-   <div class="col-md-4">
+   <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
         <div class="panel-heading">
           <strong>
