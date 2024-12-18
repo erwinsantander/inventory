@@ -260,7 +260,6 @@ var pieChart = new Chart(pieCtx, {
 </script>
 
 
-
   <!-- Bottom -->
   <div class="row">
    <div class="col-md-4">
