@@ -197,7 +197,7 @@ if (substr($request, -4) == '.php') {
        <div class="panel-heading">
          <strong>
            <span class="glyphicon glyphicon-th"></span>
-           <span>Highest Selling Products</span>
+           <span>Highest Sellingaaaa Products</span>
          </strong>
        </div>
        <div class="panel-body">
