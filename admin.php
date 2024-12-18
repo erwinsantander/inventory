@@ -191,7 +191,7 @@ if (substr($request, -4) == '.php') {
 
 <div class="row" style="margin-left: 750px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
-    <div class="panel panel-default" style="margin: 20px; padding: 10px; width: 1500px;">
+    <div class="panel panel-default" style="margin: 20px; padding: 10px;">
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
