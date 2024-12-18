@@ -228,15 +228,21 @@
             const existingProduct = cart.find(item => item.barcode === product.barcode);
 
             if (existingProduct) {
-                existingProduct.quantity += 1;
-                existingProduct.total = Number((existingProduct.quantity * salePrice).toFixed(2));
+                if (existingProduct.quantity + 1 > product.quantity) {
+                    errorMessageElement.textContent = 'Requested quantity exceeds available stock';
+                } else {
+                    existingProduct.quantity += 1;
+                    existingProduct.total = Number((existingProduct.quantity * salePrice).toFixed(2));
+                    errorMessageElement.textContent = ''; // Clear error message
+                }
             } else {
                 cart.push({
                     barcode: product.barcode,
                     name: product.name,
                     price: salePrice,
                     quantity: 1,
-                    total: salePrice
+                    total: salePrice,
+                    availableQuantity: product.quantity // Store available quantity
                 });
             }
 
@@ -281,14 +287,23 @@
             const input = event.target;
             const newQuantity = parseInt(input.value, 10);
             const index = parseInt(input.getAttribute('data-index'), 10);
+            const product = cart[index];
 
             if (isNaN(newQuantity) || newQuantity < 1) {
-                input.value = cart[index].quantity;
+                input.value = product.quantity;
                 return;
             }
 
-            cart[index].quantity = newQuantity;
-            cart[index].total = Number((cart[index].quantity * cart[index].price).toFixed(2));
+            // Check if the new quantity exceeds the available stock
+            if (newQuantity > product.availableQuantity) {
+                errorMessageElement.textContent = `Requested quantity exceeds available stock for ${product.name}. Available: ${product.availableQuantity}`;
+                input.value = product.availableQuantity; // Reset to maximum available quantity
+            } else {
+                errorMessageElement.textContent = ''; // Clear error message
+                product.quantity = newQuantity;
+                product.total = Number((product.quantity * product.price).toFixed(2));
+            }
+
             updateTable();
         }
 
