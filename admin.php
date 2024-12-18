@@ -259,6 +259,19 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
+<?php
+// Fetch the latest monthly sales data
+$latest_monthly_sales = get_latest_monthly_sales(); // This function should return an associative array with 'month' and 'total_sales'
+
+// Prepare data for the line chart
+$lineChartLabels = [];
+$lineChartData = [];
+
+foreach ($latest_monthly_sales as $sale) {
+    $lineChartLabels[] = date('M Y', strtotime($sale['month'])); // Format month as 'Jan 2024'
+    $lineChartData[] = floatval($sale['total_sales']);
+}
+?>
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-12">
     <div class="panel panel-default">
