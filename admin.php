@@ -190,7 +190,7 @@ if (substr($request, -4) == '.php') {
 </script>
 
 <!-- Highest Selling Products Pie Chart -->
-<div class="row" style="margin-left: 550px; margin-top: 24px; margin-right: 10px;">
+<div class="row" style="margin-left: 650px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
