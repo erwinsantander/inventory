@@ -5,7 +5,6 @@ $dbname = 'u510162695_ancminimart';
 $username = 'u510162695_ancminimart';
 $password = '1Ancminimart';
 
-
 try {
     // Create PDO connection
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
@@ -13,13 +12,14 @@ try {
     // Set error mode to exception
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Get barcode from GET request
+    // Get barcode and requested quantity from GET request
     $barcode = $_GET['barcode'] ?? '';
+    $requested_quantity = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 0;
 
     // Prepare SQL statement to fetch product with quantity check
     $stmt = $pdo->prepare("SELECT barcode, name, sale_price, quantity 
                             FROM products 
-                            WHERE barcode = :barcode AND quantity > 0 
+                            WHERE barcode = :barcode 
                             LIMIT 1");
     $stmt->execute(['barcode' => $barcode]);
 
@@ -30,7 +30,14 @@ try {
     header('Content-Type: application/json');
     
     if ($product) {
-        echo json_encode($product);
+        if ($requested_quantity > $product['quantity']) {
+            // Requested quantity exceeds available stock
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['error' => 'Requested quantity exceeds available stock']);
+        } else {
+            // Return product details
+            echo json_encode($product);
+        }
     } else {
         // Product not found or out of stock
         header('HTTP/1.1 404 Not Found');
