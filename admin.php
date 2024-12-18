@@ -259,40 +259,6 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-<script>
-  var roleCtx = document.getElementById('userRolesChart').getContext('2d');
-  var roleChart = new Chart(roleCtx, {
-    type: 'bar',
-    data: {
-      labels: <?php echo json_encode($role_names); ?>,
-      datasets: [{
-        label: 'Number of Users',
-        data: <?php echo json_encode($role_counts); ?>,
-        backgroundColor: 'rgba(75, 192, 192, 0.7)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      indexAxis: 'y', // This makes the bar chart horizontal
-      scales: {
-        x: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Number of Users'
-          }
-        }
-      },
-      plugins: {
-        title: {
-          display: true,
-          text: 'User Roles Distribution'
-        }
-      }
-    }
-  });
-</script>
 
    <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
@@ -331,6 +297,42 @@ var pieChart = new Chart(pieCtx, {
     </div>
    </div>
   </div>
+
+  <script>
+  var roleCtx = document.getElementById('userRolesChart').getContext('2d');
+  var roleChart = new Chart(roleCtx, {
+    type: 'bar',
+    data: {
+      labels: <?php echo json_encode($role_names); ?>,
+      datasets: [{
+        label: 'Number of Users',
+        data: <?php echo json_encode($role_counts); ?>,
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y', // This makes the bar chart horizontal
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Number of Users'
+          }
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'User Roles Distribution'
+        }
+      }
+    }
+  });
+</script>
+
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
