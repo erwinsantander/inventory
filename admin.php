@@ -259,66 +259,7 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <strong>
-                    <span class="glyphicon glyphicon-th"></span>
-                    <span>Latest Sales Per Month</span>
-                </strong>
-            </div>
-            <div class="panel-body">
-                <canvas id="latestSalesChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    
-
-    var latestSalesCtx = document.getElementById('latestSalesChart').getContext('2d');
-    var latestSalesChart = new Chart(latestSalesCtx, {
-        type: 'line',
-        data: {
-            labels: <?php echo json_encode($sales_labels); ?>,
-            datasets: [{
-                label: 'Latest Sales',
-                data: <?php echo json_encode($latestSalesChartData); ?>,
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Sales (₱)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Latest Sales Per Month'
-                }
-            }
-        }
-    });
-</script>
 
   <!-- Bottom -->
   <div class="row">
