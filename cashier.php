@@ -325,7 +325,7 @@
         function reduceProductQuantities(cart) {
             const url = 'reduce_product_quantities.php';
 
-            fetch(url, {
+            return fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -341,12 +341,15 @@
                 .then(result => {
                     if (result.success) {
                         console.log('Product quantities updated successfully');
+                        return true;
                     } else {
                         console.error('Failed to update product quantities:', result.message);
+                        return false;
                     }
                 })
                 .catch(error => {
                     console.error('Error reducing product quantities:', error);
+                    return false;
                 });
         }
 
@@ -374,8 +377,14 @@
             paymentInput.value = payment.toFixed(2);
             changeInput.value = change.toFixed(2);
 
-            reduceProductQuantities(cart);
-            document.getElementById('receiptForm').submit();
+            // Reduce product quantities and wait for the response
+            reduceProductQuantities(cart).then(success => {
+                if (success) {
+                    document.getElementById('receiptForm').submit();
+                } else {
+                    errorMessageElement.textContent = 'Failed to update product quantities. Please try again.';
+                }
+            });
         }
     </script>
     <?php if (isset($msg)): ?>
