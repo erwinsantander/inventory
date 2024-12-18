@@ -259,76 +259,114 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-<div class="row" style="margin-left: 750px; margin-top: 24px; margin-right: 10px;">
-  <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
-    <div class="panel panel-default" style="margin: 20px; padding: 10px;">
-      <div class="panel-heading"style=" width: 600px;">
+<!-- Latest Sales Per Month Line Chart -->
+<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>Highest Selling Products (Pie Chart)</span>
+          <span>Latest Sales Per Month (Line Chart)</span>
         </strong>
       </div>
-      <div class="panel-body" style="display: flex; justify-content: center;">
-        <canvas id="highestSellingProductsChart" width="400" height="200"></canvas>
+      <div class="panel-body">
+        <canvas id="latestSalesLineChart" width="400" height="200"></canvas>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-<?php
-// Prepare data for the pie chart
-$productNames = [];
-$productSales = [];
+  <?php
+  // Fetch data for latest sales per month
+  $latest_sales_monthly = get_latest_sales_by_month(12); // Assuming this function returns the last 12 months' sales
+  $salesLabels = [];
+  $salesData = [];
 
-foreach ($products_sold as $product) {
-    $productNames[] = remove_junk(first_character($product['name']));
-    $productSales[] = (int)$product['totalSold'];
-}
-?>
+  foreach ($latest_sales_monthly as $sale) {
+      $salesLabels[] = date('M Y', strtotime($sale['month'] . '-01')); // Format: Jan 2024
+      $salesData[] = (float)$sale['total_sales'];
+  }
+  ?>
 
-var pieCtx = document.getElementById('highestSellingProductsChart').getContext('2d');
-var pieChart = new Chart(pieCtx, {
-    type: 'pie',
+  var lineCtx = document.getElementById('latestSalesLineChart').getContext('2d');
+  var lineChart = new Chart(lineCtx, {
+    type: 'line',
     data: {
-        labels: <?php echo json_encode($productNames); ?>,
-        datasets: [{
-            label: 'Total Sold',
-            data: <?php echo json_encode($productSales); ?>,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)',
-                'rgba(255, 159, 64, 0.7)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
+      labels: <?php echo json_encode($salesLabels); ?>,
+      datasets: [{
+        label: 'Sales (₱)',
+        data: <?php echo json_encode($salesData); ?>,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
     },
     options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Highest Selling Products'
-            }
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Sales (₱)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Months'
+          }
         }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Latest Sales Per Month'
+        },
+        legend: {
+          display: true,
+          position: 'top',
+        }
+      }
     }
-});
+  });
 </script>
 
+
+  <!-- Bottom -->
+  <div class="row">
+   <div class="col-md-4">
+     <div class="panel panel-default">
+       <div class="panel-heading">
+         <strong>
+           <span class="glyphicon glyphicon-th"></span>
+           <span>Highest Selling Products</span>
+         </strong>
+       </div>
+       <div class="panel-body">
+         <table class="table table-striped table-bordered table-condensed">
+          <thead>
+           <tr>
+             <th>Title</th>
+             <th>Total Sold</th>
+             <th>Total Quantity</th>
+           <tr>
+          </thead>
+          <tbody>
+            <?php foreach ($products_sold as  $product_sold): ?>
+              <tr>
+                <td><?php echo remove_junk(first_character($product_sold['name'])); ?></td>
+                <td><?php echo (int)$product_sold['totalSold']; ?></td>
+                <td><?php echo (int)$product_sold['totalQty']; ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <tbody>
+         </table>
+       </div>
+     </div>
+   </div>
    <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -366,7 +404,6 @@ var pieChart = new Chart(pieCtx, {
     </div>
    </div>
   </div>
-  
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
