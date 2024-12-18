@@ -101,7 +101,7 @@ $recent_sales    = find_recent_sale_added('5');
                 </strong>
             </div>
             <div class="panel-body">
-                <canvas id="monthlySalesChart" width="400" height="200"></canvas>
+                <canvas id="monthlySalesChart" width="405" height="205"></canvas>
             </div>
         </div>
     </div>
