@@ -351,6 +351,7 @@
         }
 
 
+
         function redirectToReceipt() {
             const cartDataInput = document.getElementById('cartData');
             const totalInput = document.getElementById('total');
@@ -360,6 +361,13 @@
             const total = parseFloat(totalPriceElement.textContent.replace('Total: ₱', ''));
             const payment = parseFloat(customerPaymentInput.value) || 0;
             const change = payment >= total ? payment - total : 0;
+
+            // Update cart quantities based on input fields
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                const index = parseInt(input.getAttribute('data-index'), 10);
+                cart[index].quantity = parseInt(input.value, 10);
+                cart[index].total = Number((cart[index].quantity * cart[index].price).toFixed(2));
+            });
 
             cartDataInput.value = JSON.stringify(cart);
             totalInput.value = total.toFixed(2);
