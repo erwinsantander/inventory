@@ -190,67 +190,38 @@ if (substr($request, -4) == '.php') {
 </script>
 
 
-<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+  <!-- Bottom -->
+  <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
    <div class="col-md-4">
      <div class="panel panel-default">
        <div class="panel-heading">
          <strong>
            <span class="glyphicon glyphicon-th"></span>
-           <span>Highest Selling Products</span>
+           <span>Highest Sellingaaaa Products</span>
          </strong>
        </div>
        <div class="panel-body">
-         <canvas id="highestSellingChart" width="400" height="400"></canvas>
+         <table class="table table-striped table-bordered table-condensed">
+          <thead>
+           <tr>
+             <th>Title</th>
+             <th>Total Sold</th>
+             <th>Total Quantity</th>
+           <tr>
+          </thead>
+          <tbody>
+            <?php foreach ($products_sold as  $product_sold): ?>
+              <tr>
+                <td><?php echo remove_junk(first_character($product_sold['name'])); ?></td>
+                <td><?php echo (int)$product_sold['totalSold']; ?></td>
+                <td><?php echo (int)$product_sold['totalQty']; ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <tbody>
+         </table>
        </div>
      </div>
    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Prepare data for Chart.js
-  const productNames = <?php echo json_encode(array_map(function($product) {
-      return remove_junk(first_character($product['name']));
-  }, $products_sold)); ?>;
-
-  const totalSold = <?php echo json_encode(array_map(function($product) {
-      return (int)$product['totalSold'];
-  }, $products_sold)); ?>;
-
-  const ctx = document.getElementById('highestSellingChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: productNames,
-      datasets: [{
-        label: 'Total Sold',
-        data: totalSold,
-        backgroundColor: [
-          '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-        ],
-        hoverOffset: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        tooltip: {
-          callbacks: {
-            label: function(tooltipItem) {
-              const label = tooltipItem.label || '';
-              const value = tooltipItem.raw;
-              return `${label}: ${value}`;
-            }
-          }
-        }
-      }
-    }
-  });
-</script>
-
    <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
