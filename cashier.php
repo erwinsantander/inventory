@@ -297,7 +297,7 @@
             const quantityDifference = newQuantity - product.quantity;
 
             if (quantityDifference > 0 && newQuantity > product.availableQuantity) {
-                errorMessageElement.textContent = 'Requested quantity exceeds available stock or out of stock';
+                errorMessageElement.textContent = 'Requested quantity exceeds available stock or either out of stock';
                 input.value = product.quantity;
                 return;
             }
