@@ -1,5 +1,17 @@
 <?php
-require_once('includes/load.php'); // Ensure this includes your database connection setup
+// Database credentials
+$host = '127.0.0.1';
+$username = 'u510162695_ancminimart';
+$password = '1Ancminimart';
+$dbname = 'u510162695_ancminimart';
+
+// Create a connection
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 header('Content-Type: application/json');
 
@@ -10,25 +22,29 @@ try {
         throw new Exception('Invalid data format');
     }
 
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=u510162695_ancminimart;charset=utf8", 'u510162695_ancminimart', '1Ancminimart');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     foreach ($data as $item) {
         $barcode = $item['barcode'];
         $quantity = $item['quantity'];
 
         // Prepare SQL statement to update product quantity
-        $stmt = $pdo->prepare("UPDATE products SET quantity = quantity - :quantity WHERE barcode = :barcode AND quantity >= :quantity");
-        $stmt->execute(['quantity' => $quantity, 'barcode' => $barcode]);
+        $stmt = $conn->prepare("UPDATE products SET quantity = quantity - ? WHERE barcode = ? AND quantity >= ?");
+        $stmt->bind_param('isi', $quantity, $barcode, $quantity);
 
-        if ($stmt->rowCount() === 0) {
+        if (!$stmt->execute()) {
             throw new Exception("Failed to update quantity for barcode: $barcode");
+        }
+
+        if ($stmt->affected_rows === 0) {
+            throw new Exception("No rows updated for barcode: $barcode");
         }
     }
 
     echo json_encode(['success' => true]);
 
 } catch (Exception $e) {
+    error_log("Error updating product quantities: " . $e->getMessage());
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+} finally {
+    $conn->close();
 }
 ?>
