@@ -311,32 +311,35 @@
         }
 
         function updateProductQuantityInDatabase(barcode, quantityDifference) {
-    const url = 'update_product_quantity.php';
+            const url = 'update_product_quantity.php';
 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ barcode, quantityDifference })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        barcode,
+                        quantityDifference
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    if (result.success) {
+                        console.log('Product quantity updated successfully');
+                    } else {
+                        console.error('Failed to update product quantity:', result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating product quantity:', error);
+                });
         }
-        return response.json();
-    })
-    .then(result => {
-        if (result.success) {
-            console.log('Product quantity updated successfully');
-        } else {
-            console.error('Failed to update product quantity:', result.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error updating product quantity:', error);
-    });
-}
 
 
         function calculateSukli() {
@@ -354,15 +357,19 @@
         }
 
 
-        function reduceProductQuantities(cart) {
-            const url = 'reduce_product_quantities.php';
 
-            fetch(url, {
+        function reduceProductQuantities(cart) {
+            const url = 'update_product_quantity.php';
+
+            return fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(cart)
+                    body: JSON.stringify(cart.map(item => ({
+                        barcode: item.barcode,
+                        quantityDifference: item.quantity
+                    })))
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -371,16 +378,12 @@
                     return response.json();
                 })
                 .then(result => {
-                    if (result.success) {
-                        console.log('Product quantities updated successfully');
-                    } else {
-                        console.error('Failed to update product quantities:', result.message);
+                    if (!result.success) {
+                        throw new Error(result.message || 'Failed to update product quantities');
                     }
-                })
-                .catch(error => {
-                    console.error('Error reducing product quantities:', error);
                 });
         }
+
 
 
         function redirectToReceipt() {
@@ -398,8 +401,16 @@
             paymentInput.value = payment.toFixed(2);
             changeInput.value = change.toFixed(2);
 
-            reduceProductQuantities(cart);
-            document.getElementById('receiptForm').submit();
+            // Deduct product quantities from the database
+            reduceProductQuantities(cart)
+                .then(() => {
+                    // Submit the form after successful deduction
+                    document.getElementById('receiptForm').submit();
+                })
+                .catch(error => {
+                    console.error('Error reducing product quantities:', error);
+                    errorMessageElement.textContent = 'Failed to update product quantities. Please try again.';
+                });
         }
     </script>
     <?php if (isset($msg)): ?>
