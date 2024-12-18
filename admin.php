@@ -259,7 +259,47 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
-<!-- Products Added Per Month Line Chart -->
+
+
+   <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>
+            <span class="glyphicon glyphicon-th"></span>
+            <span>LATEST SALES</span>
+          </strong>
+        </div>
+        <div class="panel-body">
+          <table class="table table-striped table-bordered table-condensed">
+       <thead>
+         <tr>
+           <th class="text-center" style="width: 50px;">#</th>
+           <th>Product Name</th>
+           <th>Date</th>
+           <th>Total Sale</th>
+         </tr>
+       </thead>
+       <tbody>
+         <?php foreach ($recent_sales as  $recent_sale): ?>
+         <tr>
+           <td class="text-center"><?php echo count_id();?></td>
+           <td>
+            <a href="edit_sale.php?id=<?php echo (int)$recent_sale['id']; ?>">
+             <?php echo remove_junk(first_character($recent_sale['name'])); ?>
+           </a>
+           </td>
+           <td><?php echo remove_junk(ucfirst($recent_sale['date'])); ?></td>
+           <td>₱<?php echo remove_junk(first_character($recent_sale['price'])); ?></td>
+        </tr>
+
+       <?php endforeach; ?>
+       </tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+
+  <!-- Products Added Per Month Line Chart -->
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
   <div class="col-md-12">
     <div class="panel panel-default">
@@ -354,44 +394,6 @@ var pieChart = new Chart(pieCtx, {
   });
 </script>
 
-
-   <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <strong>
-            <span class="glyphicon glyphicon-th"></span>
-            <span>LATEST SALES</span>
-          </strong>
-        </div>
-        <div class="panel-body">
-          <table class="table table-striped table-bordered table-condensed">
-       <thead>
-         <tr>
-           <th class="text-center" style="width: 50px;">#</th>
-           <th>Product Name</th>
-           <th>Date</th>
-           <th>Total Sale</th>
-         </tr>
-       </thead>
-       <tbody>
-         <?php foreach ($recent_sales as  $recent_sale): ?>
-         <tr>
-           <td class="text-center"><?php echo count_id();?></td>
-           <td>
-            <a href="edit_sale.php?id=<?php echo (int)$recent_sale['id']; ?>">
-             <?php echo remove_junk(first_character($recent_sale['name'])); ?>
-           </a>
-           </td>
-           <td><?php echo remove_junk(ucfirst($recent_sale['date'])); ?></td>
-           <td>₱<?php echo remove_junk(first_character($recent_sale['price'])); ?></td>
-        </tr>
-
-       <?php endforeach; ?>
-       </tbody>
-     </table>
-    </div>
-   </div>
-  </div>
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
