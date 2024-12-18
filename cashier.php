@@ -359,30 +359,30 @@
 
 
         function reduceProductQuantities(cart) {
-            const url = 'update_product_quantity.php';
+    const url = 'update_product_quantity.php';
 
-            return fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(cart.map(item => ({
-                        barcode: item.barcode,
-                        quantityDifference: item.quantity
-                    })))
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (!result.success) {
-                        throw new Error(result.message || 'Failed to update product quantities');
-                    }
-                });
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cart.map(item => ({
+            barcode: item.barcode,
+            quantityDifference: item.quantity
+        })))
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        return response.json();
+    })
+    .then(result => {
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to update product quantities');
+        }
+    });
+}
 
 
 
