@@ -259,6 +259,78 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
+<!-- Monthly Sales Line Chart -->
+<div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>
+          <span class="glyphicon glyphicon-th"></span>
+          <span>Monthly Sales (Line Chart)</span>
+        </strong>
+      </div>
+      <div class="panel-body">
+        <canvas id="monthlySalesLineChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  <?php
+  // Use the same data from your existing monthly sales logic
+  $lineLabels = $labels; // Labels for each month
+  $lineData = $chartData; // Total sales for each month
+  ?>
+
+  var lineCtx = document.getElementById('monthlySalesLineChart').getContext('2d');
+  var lineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: <?php echo json_encode($lineLabels); ?>,
+      datasets: [{
+        label: 'Total Sales (₱)',
+        data: <?php echo json_encode($lineData); ?>,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+        pointBorderColor: '#fff',
+        pointRadius: 5,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Sales (₱)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Months'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Total Sales Per Month (2024)'
+        }
+      }
+    }
+  });
+</script>
+
+
    <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
         <div class="panel-heading">
