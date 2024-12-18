@@ -1,46 +1,48 @@
 <?php
   $page_title = 'Edit Account';
   require_once('includes/load.php');
-   page_require_level(3);
+  page_require_level(3);
 ?>
 <?php
-//update user image
-  if(isset($_POST['submit'])) {
+// Update user image
+if(isset($_POST['submit'])) {
   $photo = new Media();
   $user_id = (int)$_POST['user_id'];
   $photo->upload($_FILES['file_upload']);
   if($photo->process_user($user_id)){
-    $session->msg('s','photo has been uploaded.');
+    $session->msg('s','Photo has been uploaded.');
     redirect('edit_account.php');
-    } else{
-      $session->msg('d',join($photo->errors));
-      redirect('edit_account.php');
-    }
+  } else {
+    $session->msg('d', join($photo->errors));
+    redirect('edit_account.php');
   }
+}
 ?>
 <?php
- //update user other info
-  if(isset($_POST['update'])){
-    $req_fields = array('name','username' );
-    validate_fields($req_fields);
-    if(empty($errors)){
-             $id = (int)$_SESSION['user_id'];
-           $name = remove_junk($db->escape($_POST['name']));
-       $username = remove_junk($db->escape($_POST['username']));
-            $sql = "UPDATE users SET name ='{$name}', username ='{$username}' WHERE id='{$id}'";
+// Update user other info
+if(isset($_POST['update'])){
+  $req_fields = array('name', 'username', 'alt_email'); // Add 'alt_email' to the required fields
+  validate_fields($req_fields);
+  if(empty($errors)){
+    $id = (int)$_SESSION['user_id'];
+    $name = remove_junk($db->escape($_POST['name']));
+    $username = remove_junk($db->escape($_POST['username']));
+    $alt_email = remove_junk($db->escape($_POST['alt_email'])); // Capture alternate email
+
+    $sql = "UPDATE users SET name ='{$name}', username ='{$username}', alt_email='{$alt_email}' WHERE id='{$id}'";
     $result = $db->query($sql);
-          if($result && $db->affected_rows() === 1){
-            $session->msg('s',"Acount updated ");
-            redirect('edit_account.php', false);
-          } else {
-            $session->msg('d',' Sorry failed to updated!');
-            redirect('edit_account.php', false);
-          }
+    if($result && $db->affected_rows() === 1){
+      $session->msg('s', "Account updated");
+      redirect('edit_account.php', false);
     } else {
-      $session->msg("d", $errors);
-      redirect('edit_account.php',false);
+      $session->msg('d', 'Sorry, failed to update!');
+      redirect('edit_account.php', false);
     }
+  } else {
+    $session->msg("d", $errors);
+    redirect('edit_account.php', false);
   }
+}
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
@@ -50,7 +52,7 @@
         <div class="panel-heading">
           <div class="panel-heading clearfix">
             <span class="glyphicon glyphicon-camera"></span>
-            <span>Change My photo</span>
+            <span>Change My Photo</span>
           </div>
         </div>
         <div class="panel-body">
@@ -73,6 +75,7 @@
         </div>
       </div>
   </div>
+
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
@@ -89,6 +92,11 @@
                   <label for="username" class="control-label">Username</label>
                   <input type="text" class="form-control" name="username" value="<?php echo remove_junk(ucwords($user['username'])); ?>">
             </div>
+            <!-- New Alternate Email Field -->
+            <div class="form-group">
+                  <label for="alt_email" class="control-label">Alternate Email</label>
+                  <input type="email" class="form-control" name="alt_email" value="<?php echo remove_junk(ucwords($user['alt_email'])); ?>">
+            </div>
             <div class="form-group clearfix">
                     <a href="change_password.php" title="change password" class="btn btn-danger pull-right">Change Password</a>
                     <button type="submit" name="update" class="btn btn-info">Update</button>
@@ -98,6 +106,7 @@
     </div>
   </div>
 </div>
+
 <?php if ($msg): ?>
 <script>
     Swal.fire({
