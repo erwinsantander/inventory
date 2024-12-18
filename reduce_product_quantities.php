@@ -1,5 +1,5 @@
 <?php
-require_once('includes/load.php');
+require_once('includes/load.php'); // Ensure this includes your database connection setup
 
 header('Content-Type: application/json');
 
@@ -9,6 +9,9 @@ try {
     if (!is_array($data)) {
         throw new Exception('Invalid data format');
     }
+
+    $pdo = new PDO("mysql:host=127.0.0.1;dbname=u510162695_ancminimart;charset=utf8", 'u510162695_ancminimart', '1Ancminimart');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     foreach ($data as $item) {
         $barcode = $item['barcode'];
