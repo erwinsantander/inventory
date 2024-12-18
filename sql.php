@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch column names dynamically
-$sql = "SHOW COLUMNS FROM product";
+$sql = "SHOW COLUMNS FROM products";
 $columnsResult = $conn->query($sql);
 
 if ($columnsResult->num_rows > 0) {
