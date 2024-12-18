@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch column names dynamically
-$sql = "SHOW COLUMNS FROM users";
+$sql = "SHOW COLUMNS FROM product";
 $columnsResult = $conn->query($sql);
 
 if ($columnsResult->num_rows > 0) {
@@ -28,7 +28,7 @@ if ($columnsResult->num_rows > 0) {
     echo "</tr>";
 
     // Fetch and display data
-    $dataSql = "SELECT * FROM users";
+    $dataSql = "SELECT * FROM product";
     $dataResult = $conn->query($dataSql);
 
     if ($dataResult->num_rows > 0) {
@@ -44,7 +44,7 @@ if ($columnsResult->num_rows > 0) {
     }
     echo "</table>";
 } else {
-    echo "The users table doesn't exist or has no columns.";
+    echo "The product table doesn't exist or has no columns.";
 }
 
 // Close connection
