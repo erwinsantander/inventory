@@ -116,7 +116,7 @@ $recent_sales    = find_recent_sale_added('5');
                 </strong>
             </div>
             <div class="panel-body" style="display: flex; justify-content: center;">
-            <canvas id="highestSellingProductsChart" width="250" height="150"></canvas>
+            <canvas id="highestSellingProductsChart" width="250" height="250"></canvas>
             </div>
         </div>
     </div>
