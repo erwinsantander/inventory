@@ -28,7 +28,7 @@ if ($columnsResult->num_rows > 0) {
     echo "</tr>";
 
     // Fetch and display data
-    $dataSql = "SELECT * FROM product";
+    $dataSql = "SELECT * FROM products";
     $dataResult = $conn->query($dataSql);
 
     if ($dataResult->num_rows > 0) {
