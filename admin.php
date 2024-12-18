@@ -195,7 +195,7 @@ if (substr($request, -4) == '.php') {
       <div class="panel-heading"style=" width: 600px;">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>Highest Sellinag Products (Pie Chart)</span>
+          <span>Highest Selling Products (Pie Chart)</span>
         </strong>
       </div>
       <div class="panel-body" style="display: flex; justify-content: center;">
@@ -297,7 +297,6 @@ var pieChart = new Chart(pieCtx, {
     </div>
    </div>
   </div>
-  
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
