@@ -128,4 +128,12 @@ function get_monthly_sales($year) {
   return $db->query($sql);
 }
 
+// Function to count users by their role
+function count_users_by_role() {
+  global $db;
+  $sql = "SELECT role, COUNT(*) as total FROM users GROUP BY role";
+  return $db->query($sql);
+}
+
+
 ?>
