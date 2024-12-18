@@ -259,7 +259,75 @@ var pieChart = new Chart(pieCtx, {
 });
 </script>
 
+<div class="row" style="margin-left: 750px; margin-top: 24px; margin-right: 10px;">
+  <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
+    <div class="panel panel-default" style="margin: 20px; padding: 10px;">
+      <div class="panel-heading"style=" width: 600px;">
+        <strong>
+          <span class="glyphicon glyphicon-th"></span>
+          <span>Highest Selling Products (Pie Chart)</span>
+        </strong>
+      </div>
+      <div class="panel-body" style="display: flex; justify-content: center;">
+        <canvas id="highestSellingProductsChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+<?php
+// Prepare data for the pie chart
+$productNames = [];
+$productSales = [];
+
+foreach ($products_sold as $product) {
+    $productNames[] = remove_junk(first_character($product['name']));
+    $productSales[] = (int)$product['totalSold'];
+}
+?>
+
+var pieCtx = document.getElementById('highestSellingProductsChart').getContext('2d');
+var pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: <?php echo json_encode($productNames); ?>,
+        datasets: [{
+            label: 'Total Sold',
+            data: <?php echo json_encode($productSales); ?>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Highest Selling Products'
+            }
+        }
+    }
+});
+</script>
 
    <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
