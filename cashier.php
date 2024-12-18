@@ -368,7 +368,7 @@
             // Update cart quantities based on input fields
             document.querySelectorAll('.quantity-input').forEach(input => {
                 const index = parseInt(input.getAttribute('data-index'), 10);
-                cart[index].quantity = parseInt(input.value, 10);
+                cart[index].quantity = parseInt(input.value, 10); // Ensure this captures the correct value
                 cart[index].total = Number((cart[index].quantity * cart[index].price).toFixed(2));
             });
 
