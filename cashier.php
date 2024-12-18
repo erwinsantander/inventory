@@ -107,20 +107,19 @@
                 display: none;
             }
         }
-        
     </style>
 
-<?php
-        require_once('includes/load.php');
-        // Checkin What level user has permission to view this page
-        page_require_level(2);
+    <?php
+    require_once('includes/load.php');
+    // Checkin What level user has permission to view this page
+    page_require_level(2);
 
-        // Check for messages from previous redirects
-        if (isset($_SESSION['message'])) {
-            $msg = json_decode($_SESSION['message'], true);
-            unset($_SESSION['message']);
-        }
-        ?>
+    // Check for messages from previous redirects
+    if (isset($_SESSION['message'])) {
+        $msg = json_decode($_SESSION['message'], true);
+        unset($_SESSION['message']);
+    }
+    ?>
 </head>
 
 <body>
@@ -194,11 +193,11 @@
             const url = `${BASE_URL}?barcode=${encodeURIComponent(barcode)}`;
 
             fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -207,7 +206,14 @@
                 })
                 .then(product => {
                     if (product && product.barcode) {
-                        addToCart(product);
+                        const existingProduct = cart.find(item => item.barcode === product.barcode);
+                        const currentQuantity = existingProduct ? existingProduct.quantity : 0;
+
+                        if (currentQuantity + 1 > product.quantity) {
+                            errorMessageElement.textContent = 'Requested quantity exceeds available stock';
+                        } else {
+                            addToCart(product);
+                        }
                     } else {
                         errorMessageElement.textContent = 'Product not found or invalid response';
                     }
@@ -236,6 +242,7 @@
 
             updateTable();
         }
+
 
         function updateTable() {
             productTableBody.innerHTML = '';
@@ -299,33 +306,33 @@
             }
         }
 
-        
+
         function reduceProductQuantities(cart) {
             const url = 'reduce_product_quantities.php';
-            
+
             fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(cart)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(result => {
-                if (result.success) {
-                    console.log('Product quantities updated successfully');
-                } else {
-                    console.error('Failed to update product quantities:', result.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error reducing product quantities:', error);
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(cart)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    if (result.success) {
+                        console.log('Product quantities updated successfully');
+                    } else {
+                        console.error('Failed to update product quantities:', result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error reducing product quantities:', error);
+                });
         }
 
 
@@ -347,9 +354,8 @@
             reduceProductQuantities(cart);
             document.getElementById('receiptForm').submit();
         }
-
     </script>
-      <?php if (isset($msg)): ?>
+    <?php if (isset($msg)): ?>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             Swal.fire({
