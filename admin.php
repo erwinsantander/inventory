@@ -208,46 +208,54 @@ $recent_sales    = find_recent_sale_added('5');
     }
     ?>
 
-    var pieCtx = document.getElementById('highestSellingProductsChart').getContext('2d');
-    var pieChart = new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: <?php echo json_encode($productNames); ?>,
-            datasets: [{
-                label: 'Total Sold',
-                data: <?php echo json_encode($productSales); ?>,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)',
-                    'rgba(255, 159, 64, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Highest Selling Products'
+var pieCtx = document.getElementById('highestSellingProductsChart').getContext('2d');
+var pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: <?php echo json_encode($productNames); ?>,
+        datasets: [{
+            label: 'Total Sold',
+            data: <?php echo json_encode($productSales); ?>,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // Allow the chart to resize without maintaining the aspect ratio
+        plugins: {
+            legend: {
+                position: 'right',
+            },
+            title: {
+                display: true,
+                text: 'Highest Selling Products',
+                font: {
+                    size: 18
                 }
             }
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
         }
-    });
+    }
+});
 </script>
 
 <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
