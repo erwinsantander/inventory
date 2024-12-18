@@ -260,38 +260,6 @@ var pieChart = new Chart(pieCtx, {
 </script>
 
 
-  <!-- Bottom -->
-  <div class="row">
-   <div class="col-md-4">
-     <div class="panel panel-default">
-       <div class="panel-heading">
-         <strong>
-           <span class="glyphicon glyphicon-th"></span>
-           <span>Highest Selling Products</span>
-         </strong>
-       </div>
-       <div class="panel-body">
-         <table class="table table-striped table-bordered table-condensed">
-          <thead>
-           <tr>
-             <th>Title</th>
-             <th>Total Sold</th>
-             <th>Total Quantity</th>
-           <tr>
-          </thead>
-          <tbody>
-            <?php foreach ($products_sold as  $product_sold): ?>
-              <tr>
-                <td><?php echo remove_junk(first_character($product_sold['name'])); ?></td>
-                <td><?php echo (int)$product_sold['totalSold']; ?></td>
-                <td><?php echo (int)$product_sold['totalQty']; ?></td>
-              </tr>
-            <?php endforeach; ?>
-          <tbody>
-         </table>
-       </div>
-     </div>
-   </div>
    <div class="col-md-4" style="margin-left: 250px; margin-top: 24px; margin-right: 10px;">
       <div class="panel panel-default">
         <div class="panel-heading">
