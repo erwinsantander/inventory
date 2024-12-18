@@ -287,25 +287,57 @@
             const input = event.target;
             const newQuantity = parseInt(input.value, 10);
             const index = parseInt(input.getAttribute('data-index'), 10);
-            const product = cart[index];
 
             if (isNaN(newQuantity) || newQuantity < 1) {
+                input.value = cart[index].quantity;
+                return;
+            }
+
+            const product = cart[index];
+            const quantityDifference = newQuantity - product.quantity;
+
+            if (quantityDifference > 0 && newQuantity > product.availableQuantity) {
+                errorMessageElement.textContent = 'Requested quantity exceeds available stock';
                 input.value = product.quantity;
                 return;
             }
 
-            // Check if the new quantity exceeds the available stock
-            if (newQuantity > product.availableQuantity) {
-                errorMessageElement.textContent = `Requested quantity exceeds available stock for ${product.name}. Available: ${product.availableQuantity}`;
-                input.value = product.availableQuantity; // Reset to maximum available quantity
-            } else {
-                errorMessageElement.textContent = ''; // Clear error message
-                product.quantity = newQuantity;
-                product.total = Number((product.quantity * product.price).toFixed(2));
-            }
-
+            product.quantity = newQuantity;
+            product.total = Number((product.quantity * product.price).toFixed(2));
             updateTable();
+
+            // Update the database
+            updateProductQuantityInDatabase(product.barcode, quantityDifference);
         }
+
+        function updateProductQuantityInDatabase(barcode, quantityDifference) {
+    const url = 'update_product_quantity.php';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ barcode, quantityDifference })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            console.log('Product quantity updated successfully');
+        } else {
+            console.error('Failed to update product quantity:', result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating product quantity:', error);
+    });
+}
+
 
         function calculateSukli() {
             const total = parseFloat(totalPriceElement.textContent.replace('Total: ₱', ''));
@@ -325,7 +357,7 @@
         function reduceProductQuantities(cart) {
             const url = 'reduce_product_quantities.php';
 
-            return fetch(url, {
+            fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -341,18 +373,14 @@
                 .then(result => {
                     if (result.success) {
                         console.log('Product quantities updated successfully');
-                        return true;
                     } else {
                         console.error('Failed to update product quantities:', result.message);
-                        return false;
                     }
                 })
                 .catch(error => {
                     console.error('Error reducing product quantities:', error);
-                    return false;
                 });
         }
-
 
 
         function redirectToReceipt() {
@@ -365,26 +393,13 @@
             const payment = parseFloat(customerPaymentInput.value) || 0;
             const change = payment >= total ? payment - total : 0;
 
-            // Update cart quantities based on input fields
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                const index = parseInt(input.getAttribute('data-index'), 10);
-                cart[index].quantity = parseInt(input.value, 10); // Ensure this captures the correct value
-                cart[index].total = Number((cart[index].quantity * cart[index].price).toFixed(2));
-            });
-
             cartDataInput.value = JSON.stringify(cart);
             totalInput.value = total.toFixed(2);
             paymentInput.value = payment.toFixed(2);
             changeInput.value = change.toFixed(2);
 
-            // Reduce product quantities and wait for the response
-            reduceProductQuantities(cart).then(success => {
-                if (success) {
-                    document.getElementById('receiptForm').submit();
-                } else {
-                    errorMessageElement.textContent = 'Failed to update product quantities. Please try again.';
-                }
-            });
+            reduceProductQuantities(cart);
+            document.getElementById('receiptForm').submit();
         }
     </script>
     <?php if (isset($msg)): ?>
