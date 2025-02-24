@@ -65,7 +65,7 @@ if (isset($_SESSION['message'])) {
             <div class="p-6">
                 <div class="text-center mb-6">
                     <h1 id="page-title" class="text-3xl font-bold text-brand-primary mb-2">Login</h1>
-                    <p class="text-gray-600">ANC MINIMART</p>
+                    <p class="text-gray-600">ANC MINIMARTe</p>
                 </div>
 
                 <div id="form-container">
